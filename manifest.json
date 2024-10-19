@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Cal Hacks 2024",
+  "version": "1.0.0",
+  "description": "Chrome extension to help navigate webpages",
+  "icons": {
+    "48": "images/icon-48.png",
+    "128": "images/icon-128.png"
+  },
+}
