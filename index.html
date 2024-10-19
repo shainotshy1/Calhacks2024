@@ -1,45 +1,27 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>janet.ai</title>
     <script src="dist/main.js"></script>
-    <!-- <script type="module" src="js/sidebar.js"></script> -->
-    <!-- <script type="module" src="js/request-perm.ts"></script> -->
-  </head>
-  <body>
+    <!-- Load content.js after the DOM elements are defined -->
+</head>
+<body>
     <h1 class="sidebar-h1">Hi, I'm Janet. How can I help?</h1>
-    <!-- <p>I'm listening...</p> -->
 
-    <div id="chatlog">
-
-    </div>
+    <div id="chatlog"></div>
 
     <div>
+        <form id="input-field-form">
+            <input type="text" id="input-field" name="input-field" required/>
+            <button type="submit">Send</button>
+        </form>
+    </div>
 
-    <form id="input-field-form">
-      <!-- <label>Test field:  -->
-        <input type="text" id="input-field" name="input-field" required/>
-      <!-- </label> -->
-      <!-- <br /><br /> -->
-      <button type="submit">Send</button>
-    </form>
     <p id="log"></p>
-      
 
-    <!-- <form action="" method="get" id="input-field">
-      <div id="input-field-div">
-        <input type="text" name="input-field" required/>
-      </div>
-      <div id="input-submit">
-        <input type="submit" value="Send" />
-      </div>
-    </form>
-  </div> -->
-    
+    <!-- Button that will trigger the debug action -->
+    <button id="debug-button">Debug</button>
 
-    <!-- <script src="js/sidebar.js" type="module"></script> -->
-     <!-- <script src="dist/main.js"></script> -->
-     <!-- <script src="js/sidebar.js"></script> -->
-    
-  </body>
+    <!-- This script will listen for the debug button click and execute actions -->
+</body>
 </html>

@@ -26,6 +26,9 @@ function addToChat(s) {
 
 //==== CHATTING FEATURE ====//
 document.addEventListener('DOMContentLoaded', function() {
+
+  console.log('hi')
+
   const form = document.getElementById('input-field-form');
   const input = document.getElementById('input-field');
   // const output = document.getElementById('output');
