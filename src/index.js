@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 //==== IMPORTS ====//
 // import OpenAI from "openai";
@@ -8,46 +8,69 @@
 // import { Groq } from "../node_modules/groq-sdk/index.js";
 // const Groq = require("./node_modules/groq-sdk");
 
-import { Groq } from "groq-sdk"
+import { Groq } from "groq-sdk";
 
 //==== CHATLOG ====//
-function addToChat(s) {
-    // create a new div element
-    const newDiv = document.createElement("div");
-    // and give it some content
-    const newContent = document.createTextNode(s);
-    // add the text node to the newly created div
-    newDiv.appendChild(newContent);
-    // add the newly created element and its content into the DOM
-    const currentDiv = document.getElementById("chatlog");
-    // document.body.insertBefore(newDiv, currentDiv);
-    currentDiv.appendChild(newDiv);
+function addToChat(s, do_save = true) {
+  const newDiv = document.createElement("div");
+  const newContent = document.createTextNode(s);
+  newDiv.appendChild(newContent);
+  const currentDiv = document.getElementById("chatlog");
+  currentDiv.appendChild(newDiv);
+  console.log(s);
+  if (do_save) saveToLocalStorage(s);
+}
+
+function saveToLocalStorage(message) {
+  let chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
+  chatLog.push(message);
+  console.log(chatLog)
+  localStorage.setItem("chatLog", JSON.stringify(chatLog));
+}
+
+function loadChatLog() {
+  const chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
+  chatLog.forEach((message) => addToChat(message, false));
+}
+
+function clearChatLog() {
+  localStorage.removeItem("chatLog");
+  const chatlogDiv = document.getElementById("chatlog");
+  chatlogDiv.innerHTML = "";
 }
 
 //==== CHATTING FEATURE ====//
-document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('input-field-form');
-  const input = document.getElementById('input-field');
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("input-field-form");
+  const input = document.getElementById("input-field");
+  const chatClear = document.getElementById("clear-chat");
   // const output = document.getElementById('output');
 
+  loadChatLog();
+  console.log('test');
+
   function handleSubmit(event) {
-      event.preventDefault();
+    console.log(event);
+    event.preventDefault();
     const userInput = input.value.trim();
+    console.log(userInput);
     addToChat(userInput);
     messageGroq(userInput);
-      // output.textContent = `You entered: ${userInput}`;
-      input.value = ''; // Clear the input field
+    // output.textContent = `You entered: ${userInput}`;
+    input.value = ""; // Clear the input field
   }
 
   // Handle form submission
-  form.addEventListener('submit', handleSubmit);
+  form.addEventListener("submit", handleSubmit);
 
   // Handle Enter key press
-  input.addEventListener('keypress', function(event) {
-      if (event.key === 'Enter') {
-          handleSubmit(event);
-      }
+  input.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      handleSubmit(event);
+    }
   });
+
+  chatClear.addEventListener("click", clearChatLog);
 });
 // const inputs = document.getElementById("input-field").elements;
 // const input = inputs[0];
@@ -58,15 +81,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //==== GROQ CALLS ====//
 // const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-const groq = new Groq({ apiKey: "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", dangerouslyAllowBrowser: true})
+const groq = new Groq({
+  apiKey: "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",
+  dangerouslyAllowBrowser: true,
+});
 
 // export
 async function messageGroq(content) {
   const chatCompletion = await getGroqChatCompletion(content);
   // Print the completion returned by the LLM.
-    //   console.log(chatCompletion.choices[0]?.message?.content || "");
-    const s = chatCompletion.choices[0]?.message?.content || "";
-    addToChat(s);
+  //   console.log(chatCompletion.choices[0]?.message?.content || "");
+  const s = chatCompletion.choices[0]?.message?.content || "";
+  addToChat(s);
 }
 
 // export
@@ -108,7 +134,6 @@ async function getGroqChatCompletion(content) {
 // .catch((err) => {
 //   console.error(`${err.name}: ${err.message}`);
 // })
-
 
 // import Vapi from "@vapi-ai/web";
 

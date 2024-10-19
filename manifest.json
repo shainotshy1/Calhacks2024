@@ -15,9 +15,16 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["index.html"],
-      "matches": ["*://*/*"]
+      "resources": [
+        "index.html"
+      ],
+      "matches": [
+        "*://*/*"
+      ]
     }
-],
-  "permissions": ["sidePanel", "scripting", "activeTab"]
+  ],
+  "permissions": [
+    "sidePanel",
+    "activeTab"
+  ]
 }
