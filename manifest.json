@@ -7,6 +7,7 @@
     "48": "images/icon-48.png",
     "128": "images/icon-128.png"
   },
+<<<<<<< HEAD
   "background": {
     "service_worker": "js/service-worker.js"
   },
@@ -14,4 +15,6 @@
     "default_path": "popup.html"
   },
   "permissions": ["sidePanel", "scripting", "activeTab"]
+=======
+>>>>>>> parent of 1ee465c (fixed)
 }
