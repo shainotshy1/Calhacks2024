@@ -13,5 +13,11 @@
   "side_panel": {
     "default_path": "sidebar.html"
   },
+  "web_accessible_resources": [
+    {
+      "resources": ["sidebar.html", "js/request-perm.ts"],
+      "matches": ["*://*/*"]
+    }
+],
   "permissions": ["sidePanel", "scripting", "activeTab"]
 }
