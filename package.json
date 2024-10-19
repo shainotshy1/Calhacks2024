@@ -1,0 +1,21 @@
+{
+  "name": "calhacks2024",
+  "version": "1.0.0",
+  "description": "## Insert Title",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "groq-sdk": "^0.7.0",
+    "rollup": "^4.24.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "main": "index.js",
+  "keywords": []
+}

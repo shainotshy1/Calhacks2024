@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/jennifer/Developer/Calhacks2024/WebVoyager/run.py", line 10, in <module>
+    from selenium import webdriver
+ModuleNotFoundError: No module named 'selenium'
