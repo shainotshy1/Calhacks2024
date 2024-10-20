@@ -14,28 +14,48 @@ function getDOM() {
   // return document.getElementsByTagName("*");
   // return document.body.innerText;
   // return "hello";
-  let result = document.getElementsByTagName("*");
-  // let result = document.title;
-  let elems = ["Title: " + document.title];
+
+  const result = document.getElementsByTagName('input');
+  const elements = []
+
   for (let i = 0; i < result.length; i++) {
-    // if (result[i].tagName == 'A' || result[i].tagName == 'INPUT' || result[i].tagName == 'TEXTAREA' || result[i].tagName == 'H1' || result[i].tagName == 'H2' || result[i].tagName == 'H3') {
-    if (result[i].ariaCurrent || result[i].ariaSelected || result[i].tabindex >= 0 || (result[i].tagName == 'A' && result[i].href && result[i].innerText) || ((result[i].tagName == 'INPUT' || result[i].tagName == 'SELECT' || result[i].tagName == 'BUTTON') && !result[i].disabled)) { //  || result[i].tagName == 'A' || result[i].tagName == 'INPUT' || result[i].tagName == 'SELECT'
-      let str = "HTML: " + result[i].tagName;
-      if (result[i].id) {
-        str += " ID: " + result[i].id;
-      }
-      if (result[i].for) {
-        str += " For: " + result[i].for;
-      }
-      if (result[i].type) {
-        str += " Type: " + result[i].type;
-      }
-      if (result[i].innerText) {
-        str += ", innerText: " + result[i].innerText;
-      }
-      elems.push(str);
-    }
+      const e = result[i]
+      let final = e.tagName;
+
+      final += '(';
+
+      if (e.id) { final += `id='${e.id}' `;}
+      if (e.type) { final += `type='${e.type}' `; }
+      if (e.placeholder) { final += `placeholder='${e.placeholder}' `;}
+
+      elements.push(final)
   }
+
+  return elements
+
+  // let result = document.getElementsByTagName("*");
+
+  // let elems = ["Title: " + document.title];
+  // for (let i = 0; i < result.length; i++) {
+  //   // if (result[i].tagName == 'A' || result[i].tagName == 'INPUT' || result[i].tagName == 'TEXTAREA' || result[i].tagName == 'H1' || result[i].tagName == 'H2' || result[i].tagName == 'H3') {
+  //   if (result[i].ariaCurrent || result[i].ariaSelected || result[i].tabindex >= 0 || (result[i].tagName == 'A' && result[i].href && result[i].innerText) || ((result[i].tagName == 'INPUT' || result[i].tagName == 'SELECT' || result[i].tagName == 'BUTTON') && !result[i].disabled)) { //  || result[i].tagName == 'A' || result[i].tagName == 'INPUT' || result[i].tagName == 'SELECT'
+  //     let str = "HTML: " + result[i].tagName;
+  //     if (result[i].id) {
+  //       str += " ID: " + result[i].id;
+  //     }
+  //     if (result[i].for) {
+  //       str += " For: " + result[i].for;
+  //     }
+  //     if (result[i].type) {
+  //       str += " Type: " + result[i].type;
+  //     }
+  //     if (result[i].innerText) {
+  //       str += ", innerText: " + result[i].innerText;
+  //     }
+  //     elems.push(str);
+  //   }
+  // }
+
   // for (let i = 0; i < result.length; i++) {
   //   if (result[i].tagName.toUpperCase === "P") {
   //     elems.push("Tag: " + result[i].tagName + ", Attributes: " + result[i].attributes + ", innerText: " + result[i].innerText);
