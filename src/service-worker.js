@@ -19,15 +19,15 @@ function getDOM() {
   for (let i = 0; i < result.length; i++) {
     // if (result[i].tagName == 'A' || result[i].tagName == 'INPUT' || result[i].tagName == 'TEXTAREA' || result[i].tagName == 'H1' || result[i].tagName == 'H2' || result[i].tagName == 'H3') {
     if (result[i].ariaCurrent || result[i].ariaSelected || result[i].tabindex >= 0 || (result[i].tagName == 'A' && result[i].href && result[i].innerText) || ((result[i].tagName == 'INPUT' || result[i].tagName == 'SELECT' || result[i].tagName == 'BUTTON') && !result[i].disabled)) { //  || result[i].tagName == 'A' || result[i].tagName == 'INPUT' || result[i].tagName == 'SELECT'
-      let str = "HTMLTag: " + result[i].tagName;
+      let str = "HTML: " + result[i].tagName;
       if (result[i].id) {
-        str += ", ID: " + result[i].id;
+        str += " ID: " + result[i].id;
       }
       if (result[i].for) {
-        str += ", For: " + result[i].for;
+        str += " For: " + result[i].for;
       }
       if (result[i].type) {
-        str += ", Type: " + result[i].type;
+        str += " Type: " + result[i].type;
       }
       if (result[i].innerText) {
         str += ", innerText: " + result[i].innerText;
