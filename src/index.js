@@ -1,4 +1,7 @@
 "use strict";
+
+import { script_action } from "./content.js";
+
 const axios = require("axios");
 
 //==== IMPORTS ====//
@@ -274,35 +277,33 @@ async function messageGroq(content) {
   console.log(actions);
   await playText(explanation);
   addToChat(explanation);
+  for (let i = 0; i < actions.length; i++) {
+    console.log(actions[i]);
+    script_action(actions[i]);
+  }
 }
 
 // export
 async function getGroqChatCompletion(content, elements) {
-  //   input_entries = [
-  //     ChatEntry(role='system', content="
-  //               You are tasked with coming up with high level plan of how to solve the task specified by the user by performing a sequence on actions on a website given the elements available on the website.
-  //               Your response should be formatted as json following the structure {'actions':[Action], 'explanation': str}, where the explanation is a short explanation of the actions being and an action can look like any of the following,
-  //               - "Input(id="{id}").set_value("{input}")"
-  //               - "TextArea(id="{id}".set_value("{input}")"
-  //               - "Input(id="{id}").submit()"
-  //         """),
-  //     ChatEntry(role='system', content="The following elements are available in the website:\n" + '\n'.join([str(i) for i in elements])),
-  //     ChatEntry(role='user', content=f"I want to buy the latest iPhone."),
-  // ]
-  // output = json.loads(chat_api.chat(input_entries))
-  // explanation = output['explanation']
-  // actions = output['actions']
+
+  console.log('contacting groq v1.2');
+  console.log('elements', elements);
 
   return groq.chat.completions.create({
     messages: [
       {
         role: "system",
         content: `You are tasked with coming up with a high level solution to perform the task specified by the user. Your response should beformatted as a json including {action:[Action], explanation: str} where the explanation is a concise explanation of the actions to take and the actions are any of the following
-          - {type: "input", id: "{id}", value: "{input}", action="set_value"}
-          - {type: "input", id: "{id}", action="submit"}
-
-        Try to keep your actions within the current webpage. The following elements are available on the website, and their HTML attributes:\n${elements}
-        `,
+          - {type: "input", id: "{id}", value: "{input}", action: "set_value"}
+          - {type: "input", id: "{id}", value: "{input}", action: "set_value_and_submit"}
+          - {type: "input", id: "{id}", action: "submit"}
+          - {action: "redirect", link: "{link}"}
+        
+        Keep your actions within the current webpage. The following elements are available on the website, and their HTML attributes:\n${elements}
+        `
+        // Try to keep your actions within the current webpage. The following elements are available on the website, and their HTML attributes:
+        // [{Input(id='search', type='search', placeholder='What can we help you find?')},
+        // {Button(id='search-icon', type='submit')}]
       },
       {
         role: "user",

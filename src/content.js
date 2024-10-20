@@ -1,5 +1,48 @@
 import { Groq } from "groq-sdk"
 
+export async function perform_action(action) {
+    console.log('called action', action.name);
+
+    if (action.action === "redirect") {
+        // Redirect to the specified URL
+        console.log('trying to redirect to website', action.link)
+        window.location.href = action.link;
+        return;  // Exit after redirection
+    }
+    
+    const element = document.getElementById(action.id);
+    
+    if (element) {
+        console.log(action.action, action.value);
+        if (action.action === "set_value") {
+            element.value = action.value
+            const form = element.closest('form');
+            if (form) {
+                form.submit();  // Submit the form
+            } else {
+                console.log('No form found for this element');
+            }
+        } else if (action.action === "submit") {
+        }
+    } else {
+        console.log('element not found for id', action.id);
+    }
+}
+
+export async function script_action(action) {
+
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        var activeTab = tabs[0];
+        var activeTabId = activeTab.id;
+        
+        chrome.scripting.executeScript({
+            target: { tabId: activeTabId },
+            func : perform_action,
+            args : [action]
+        });
+      });
+}
+
 // Function to find input elements and textareas
 function findInputElements() {
     const elements = [];
