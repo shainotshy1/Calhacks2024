@@ -1,5 +1,7 @@
 "use strict";
 
+import { script_action } from "./content.js";
+
 //==== IMPORTS ====//
 import { Groq } from "groq-sdk";
 
@@ -91,7 +93,11 @@ async function messageGroq(content) {
   const explanation = parsedResponse.explanation;
   const actions = parsedResponse.action;
   console.log(actions)
-  addToChat(explanation);
+  addToChat(explanation + actions);
+  for (let i = 0; i < actions.length; i++) {
+    console.log(actions[i]);
+    script_action(actions[i]);
+  }
 }
 
 // export
@@ -111,6 +117,8 @@ async function getGroqChatCompletion(content, elements) {
   // explanation = output['explanation']
   // actions = output['actions']
 
+  console.log('elements', elements);
+
   return groq.chat.completions.create({
     messages: [
       {
@@ -119,8 +127,11 @@ async function getGroqChatCompletion(content, elements) {
           - {type: "input", id: "{id}", value: "{input}", action="set_value"}
           - {type: "input", id: "{id}", action="submit"}
 
-        Try to keep your actions within the current webpage. The following elements are available on the website, and their HTML attributes:\n${elements}
+          Try to keep your actions within the current webpage. The following elements are available on the website, and their HTML attributes:
+          [{Input(id='search', type='search', placeholder='What can we help you find?')},
+          {Button(id='search-icon', type='submit')}]
         `
+        //Try to keep your actions within the current webpage. The following elements are available on the website, and their HTML attributes:\n${elements}
       },
       {
         role: "user",

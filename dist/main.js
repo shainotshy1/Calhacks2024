@@ -2,6 +2,435 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/content.js":
+/*!************************!*\
+  !*** ./src/content.js ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   perform_action: () => (/* binding */ perform_action),
+/* harmony export */   script_action: () => (/* binding */ script_action)
+/* harmony export */ });
+
+
+async function perform_action(action) {
+    console.log('called action', action.name);
+    
+    const element = document.getElementById(action.id);
+    
+    if (element) {
+        console.log(action.action, action.value);
+        if (action.action === "set_value") {
+            element.value = action.value
+            const form = element.closest('form');
+            if (form) {
+                form.submit();  // Submit the form
+            } else {
+                console.log('No form found for this element');
+            }
+        } else if (action.action === "submit") {
+        }
+    } else {
+        console.log('element not found for id', action.id);
+    }
+}
+
+async function script_action(action) {
+
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        var activeTab = tabs[0];
+        var activeTabId = activeTab.id;
+        
+        chrome.scripting.executeScript({
+            target: { tabId: activeTabId },
+            func : perform_action,
+            args : [action]
+        });
+      });
+}
+
+// Function to find input elements and textareas
+function findInputElements() {
+    const elements = [];
+
+    // Find input elements
+    const inputElements = document.querySelectorAll('input');
+    inputElements.forEach(el => {
+        if (el.id) {
+            elements.push({ id: el.id, tag: 'input', name: el.name || '' });
+        }
+    });
+
+    // Find textarea elements
+    const textareaElements = documesnt.querySelectorAll('textarea');
+    textareaElements.forEach(el => {
+        if (el.id) {
+            elements.push({ id: el.id, tag: 'textarea', name: el.name || '' });
+        }
+    });
+
+    return elements;
+}
+
+// Function to set the value of an input or textarea
+function setValue(elementId, value) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.value = value;
+        console.log(`Value set for element ${elementId}: ${value}`);
+    } else {
+        console.log(`Element with ID ${elementId} not found`);
+    }
+}
+
+// Function to submit a form
+function submitForm(formId) {
+    const form = document.getElementById(formId);
+    if (form) {
+        form.submit();
+        console.log(`Form with ID ${formId} submitted.`);
+    } else {
+        console.log(`Form with ID ${formId} not found.`);
+    }
+}
+
+// This function will execute a predefined set of actions
+function executeActions(actions) {
+    actions.forEach(action => {
+        if (action.type === "input") {
+            setValue(action.id, action.value);
+        } else if (action.type === "submit") {
+            submitForm(action.id);
+        }
+    });
+}
+
+// Function to be called when the "Debug" button is clicked
+function triggerDebugActions() {
+    // Log available elements on the page (optional)
+    const elements = findInputElements();
+    console.log("Elements found: ", JSON.stringify(elements, null, 2));  // Improved logging for better visibility
+
+    // Example actions to perform (these could be dynamic or predefined)
+    const actions = [
+        { type: "input", id: "input-field", value: "Debug Test" },  // Set value in input field
+        { type: "submit", id: "input-field-form" }  // Submit the form
+    ];
+
+    // Execute actions
+    executeActions(actions);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const debugBtn = document.getElementById('debug-button');
+
+    console.log('doin stuff')
+
+    debugBtn.addEventListener("click", () => {
+        console.log('debug was clicked')
+        // Call the function defined in content.js to execute actions
+        triggerDebugActions();
+    });
+});
+
+
+/***/ }),
+
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _content_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./content.js */ "./src/content.js");
+/* harmony import */ var groq_sdk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! groq-sdk */ "./node_modules/groq-sdk/index.mjs");
+
+
+
+
+//==== IMPORTS ====//
+
+
+//==== CHATLOG ====//
+function addToChat(s, do_save = true) {
+  const newDiv = document.createElement("div");
+  const newContent = document.createTextNode(s);
+  newDiv.appendChild(newContent);
+  const currentDiv = document.getElementById("chatlog");
+  currentDiv.appendChild(newDiv);
+  console.log(s);
+  if (do_save) saveToLocalStorage(s);
+}
+
+function saveToLocalStorage(message) {
+  let chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
+  chatLog.push(message);
+  console.log(chatLog)
+  localStorage.setItem("chatLog", JSON.stringify(chatLog));
+}
+
+function loadChatLog() {
+  const chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
+  chatLog.forEach((message) => addToChat(message, false));
+}
+
+function clearChatLog() {
+  localStorage.removeItem("chatLog");
+  const chatlogDiv = document.getElementById("chatlog");
+  chatlogDiv.innerHTML = "";
+}
+
+//==== CHATTING FEATURE ====//
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("input-field-form");
+  const input = document.getElementById("input-field");
+  const chatClear = document.getElementById("clear-chat");
+
+  loadChatLog();
+  console.log('test');
+
+  function handleSubmit(event) {
+    console.log(event);
+    event.preventDefault();
+    const userInput = input.value.trim();
+    console.log(userInput);
+    addToChat(userInput);
+    messageGroq(userInput);
+    // output.textContent = `You entered: ${userInput}`;
+    input.value = ""; // Clear the input field
+  }
+
+  // Handle form submission
+  form.addEventListener("submit", handleSubmit);
+
+  // Handle Enter key press
+  input.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      handleSubmit(event);
+    }
+  });
+
+  chatClear.addEventListener("click", clearChatLog);
+});
+
+//==== GROQ CALLS ====//
+// const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const groq = new groq_sdk__WEBPACK_IMPORTED_MODULE_1__.Groq({
+  apiKey: "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",
+  dangerouslyAllowBrowser: true,
+});
+
+// export
+async function messageGroq(content) {
+  // const chatCompletion = await getGroqChatCompletion(content);
+  // // Print the completion returned by the LLM.
+  // //   console.log(chatCompletion.choices[0]?.message?.content || "");
+  // const s = chatCompletion.choices[0]?.message?.content || "";
+  // addToChat(s);
+  const chatCompletion = await getGroqChatCompletion(content, JSON.parse(localStorage.getItem("currentHTMLElements")));
+  const s = chatCompletion.choices[0]?.message?.content || "";
+  let parsedResponse;
+  try {
+    parsedResponse = JSON.parse(s);
+  } catch (error) {
+    console.error("Error parsing JSON response:", error);
+    throw new Error("Invalid JSON format from completion");
+  }
+  const explanation = parsedResponse.explanation;
+  const actions = parsedResponse.action;
+  console.log(actions)
+  addToChat(explanation + actions);
+  for (let i = 0; i < actions.length; i++) {
+    console.log(actions[i]);
+    (0,_content_js__WEBPACK_IMPORTED_MODULE_0__.script_action)(actions[i]);
+  }
+}
+
+// export
+async function getGroqChatCompletion(content, elements) {
+  //   input_entries = [
+  //     ChatEntry(role='system', content="
+  //               You are tasked with coming up with high level plan of how to solve the task specified by the user by performing a sequence on actions on a website given the elements available on the website.
+  //               Your response should be formatted as json following the structure {'actions':[Action], 'explanation': str}, where the explanation is a short explanation of the actions being and an action can look like any of the following,
+  //               - "Input(id="{id}").set_value("{input}")"
+  //               - "TextArea(id="{id}".set_value("{input}")"
+  //               - "Input(id="{id}").submit()"
+  //         """),
+  //     ChatEntry(role='system', content="The following elements are available in the website:\n" + '\n'.join([str(i) for i in elements])),
+  //     ChatEntry(role='user', content=f"I want to buy the latest iPhone."),
+  // ]
+  // output = json.loads(chat_api.chat(input_entries))
+  // explanation = output['explanation']
+  // actions = output['actions']
+
+  console.log('elements', elements);
+
+  return groq.chat.completions.create({
+    messages: [
+      {
+        role: "system",
+        content: `You are tasked with coming up with a high level solution to perform the task specified by the user. Your response should beformatted as a json including {action:[Action], explanation: str} where the explanation is a concise explanation of the actions to take and the actions are any of the following
+          - {type: "input", id: "{id}", value: "{input}", action="set_value"}
+          - {type: "input", id: "{id}", action="submit"}
+
+          Try to keep your actions within the current webpage. The following elements are available on the website, and their HTML attributes:
+          [{Input(id='search', type='search', placeholder='What can we help you find?')},
+          {Button(id='search-icon', type='submit')}]
+        `
+        //Try to keep your actions within the current webpage. The following elements are available on the website, and their HTML attributes:\n${elements}
+      },
+      {
+        role: "user",
+        content: content,
+      },
+    ],
+    model: "llama3-8b-8192",
+    response_format: { type: "json_object" },
+  });
+}
+      
+//     },
+//       {
+//         role: "user",
+//         content: content,
+//       },
+//     ],
+//     model: "llama3-8b-8192",
+//   });
+// }
+
+//==== GET DOM ====//
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    console.log(sender.tab ?
+                "from a content script:" + sender.tab.url :
+                "from the extension");
+    if (request)
+      sendResponse({ farewell: "received" });
+    
+    // addToChat(JSON.stringify(request))
+    // let result = request.elements;
+    // addToChat(request)
+    // addToChat(JSON.stringify(request));
+    saveElements(request);
+    // addToChat(result[0].tagName);
+  }
+);
+
+async function saveElements(result) {
+  // let elems = [];
+  // for (let i = 0; i < result.length; i++) {
+  //   if (result[i].tagName === 'input' || result[i].tagName === 'textarea' || result[i].tagName === 'button' || result[i].tagName === 'a' || result[i].tagName === 'div') {
+  //     elems.push("Tag: " + result[i].tagName + ", Attributes: " + result[i].attributes + ", innerText: " + result[i].innerText);
+  //   }
+  // }
+  // addToChat(request.greeting);
+  // let chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
+  // chatLog.push(message);
+  // console.log(chatLog)
+  localStorage.setItem("currentHTMLElements", JSON.stringify(result));
+  // addToChat(localStorage.getItem("currentHTMLElements"));
+  // addToChat(JSON.stringify(result));
+}
+
+//==== MAIN ====//
+// addToChat(instruction)
+// main()
+
+// call api
+// fetch webpage elements
+
+//==== mic attempts
+
+// export const injectMicrophonePermissionIframe = () => {
+//   const iframe = document.createElement("iframe");
+//   iframe.setAttribute("hidden", "hidden");
+//   iframe.setAttribute("id", "permissionsIFrame");
+//   iframe.setAttribute("allow", "microphone");
+//   iframe.src = chrome.runtime.getURL("sidebar.html");
+//   document.body.appendChild(iframe);
+// };
+
+// navigator.mediaDevices.getUserMedia({ audio: true })
+// .then(
+//   (stream) => {
+//     const audio = stream;
+//   })
+// .catch((err) => {
+//   console.error(`${err.name}: ${err.message}`);
+// })
+
+// import Vapi from "@vapi-ai/web";
+
+// const vapi = new Vapi("b1dcd146-1d59-4b93-802c-2ca2ce1c4462");
+
+// const assistantOptions = {
+//     name: "Vapi’s Pizza Front Desk",
+//     firstMessage: "Vappy’s Pizzeria speaking, how can I help you?",
+//     transcriber: {
+//       provider: "deepgram",
+//       model: "nova-2",
+//       language: "en-US",
+//     },
+//     voice: {
+//       provider: "playht",
+//       voiceId: "jennifer",
+//     },
+//     model: {
+//       provider: "openai",
+//       model: "gpt-4",
+//       messages: [
+//         {
+//           role: "system",
+//           content: `You are a voice assistant for Vappy’s Pizzeria, a pizza shop located on the Internet.
+
+//   Your job is to take the order of customers calling in. The menu has only 3 types
+//   of items: pizza, sides, and drinks. There are no other types of items on the menu.
+
+//   1) There are 3 kinds of pizza: cheese pizza, pepperoni pizza, and vegetarian pizza
+//   (often called "veggie" pizza).
+//   2) There are 3 kinds of sides: french fries, garlic bread, and chicken wings.
+//   3) There are 2 kinds of drinks: soda, and water. (if a customer asks for a
+//   brand name like "coca cola", just let them know that we only offer "soda")
+
+//   Customers can only order 1 of each item. If a customer tries to order more
+//   than 1 item within each category, politely inform them that only 1 item per
+//   category may be ordered.
+
+//   Customers must order 1 item from at least 1 category to have a complete order.
+//   They can order just a pizza, or just a side, or just a drink.
+
+//   Be sure to introduce the menu items, don't assume that the caller knows what
+//   is on the menu (most appropriate at the start of the conversation).
+
+//   If the customer goes off-topic or off-track and talks about anything but the
+//   process of ordering, politely steer the conversation back to collecting their order.
+
+//   Once you have all the information you need pertaining to their order, you can
+//   end the conversation. You can say something like "Awesome, we'll have that ready
+//   for you in 10-20 minutes." to naturally let the customer know the order has been
+//   fully communicated.
+
+//   It is important that you collect the order in an efficient manner (succinct replies
+//   & direct questions). You only have 1 task here, and it is to collect the customers
+//   order, then end the conversation.
+
+//   - Be sure to be kind of funny and witty!
+//   - Keep all your responses short and simple. Use casual language, phrases like "Umm...", "Well...", and "I mean" are preferred.
+//   - This is a voice conversation, so keep your responses short, like in a real conversation. Don't ramble for too long.`,
+//         },
+//       ],
+//     },
+//   };
+
+//   vapi.start(assistantOptions);
+
+
+/***/ }),
+
 /***/ "./node_modules/groq-sdk/_shims/MultipartBody.mjs":
 /*!********************************************************!*\
   !*** ./node_modules/groq-sdk/_shims/MultipartBody.mjs ***!
@@ -2261,381 +2690,13 @@ const VERSION = '0.7.0'; // x-release-please-version
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
-(() => {
-var __webpack_exports__ = {};
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var groq_sdk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! groq-sdk */ "./node_modules/groq-sdk/index.mjs");
-
-
-//==== IMPORTS ====//
-
-
-//==== CHATLOG ====//
-function addToChat(s, do_save = true) {
-  const newDiv = document.createElement("div");
-  const newContent = document.createTextNode(s);
-  newDiv.appendChild(newContent);
-  const currentDiv = document.getElementById("chatlog");
-  currentDiv.appendChild(newDiv);
-  console.log(s);
-  if (do_save) saveToLocalStorage(s);
-}
-
-function saveToLocalStorage(message) {
-  let chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
-  chatLog.push(message);
-  console.log(chatLog)
-  localStorage.setItem("chatLog", JSON.stringify(chatLog));
-}
-
-function loadChatLog() {
-  const chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
-  chatLog.forEach((message) => addToChat(message, false));
-}
-
-function clearChatLog() {
-  localStorage.removeItem("chatLog");
-  const chatlogDiv = document.getElementById("chatlog");
-  chatlogDiv.innerHTML = "";
-}
-
-//==== CHATTING FEATURE ====//
-document.addEventListener("DOMContentLoaded", function () {
-  const form = document.getElementById("input-field-form");
-  const input = document.getElementById("input-field");
-  const chatClear = document.getElementById("clear-chat");
-
-  loadChatLog();
-  console.log('test');
-
-  function handleSubmit(event) {
-    console.log(event);
-    event.preventDefault();
-    const userInput = input.value.trim();
-    console.log(userInput);
-    addToChat(userInput);
-    messageGroq(userInput);
-    // output.textContent = `You entered: ${userInput}`;
-    input.value = ""; // Clear the input field
-  }
-
-  // Handle form submission
-  form.addEventListener("submit", handleSubmit);
-
-  // Handle Enter key press
-  input.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      handleSubmit(event);
-    }
-  });
-
-  chatClear.addEventListener("click", clearChatLog);
-});
-
-//==== GROQ CALLS ====//
-// const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-const groq = new groq_sdk__WEBPACK_IMPORTED_MODULE_0__.Groq({
-  apiKey: "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",
-  dangerouslyAllowBrowser: true,
-});
-
-// export
-async function messageGroq(content) {
-  // const chatCompletion = await getGroqChatCompletion(content);
-  // // Print the completion returned by the LLM.
-  // //   console.log(chatCompletion.choices[0]?.message?.content || "");
-  // const s = chatCompletion.choices[0]?.message?.content || "";
-  // addToChat(s);
-  const chatCompletion = await getGroqChatCompletion(content, JSON.parse(localStorage.getItem("currentHTMLElements")));
-  const s = chatCompletion.choices[0]?.message?.content || "";
-  let parsedResponse;
-  try {
-    parsedResponse = JSON.parse(s);
-  } catch (error) {
-    console.error("Error parsing JSON response:", error);
-    throw new Error("Invalid JSON format from completion");
-  }
-  const explanation = parsedResponse.explanation;
-  const actions = parsedResponse.action;
-  console.log(actions)
-  addToChat(explanation);
-}
-
-// export
-async function getGroqChatCompletion(content, elements) {
-  //   input_entries = [
-  //     ChatEntry(role='system', content="
-  //               You are tasked with coming up with high level plan of how to solve the task specified by the user by performing a sequence on actions on a website given the elements available on the website.
-  //               Your response should be formatted as json following the structure {'actions':[Action], 'explanation': str}, where the explanation is a short explanation of the actions being and an action can look like any of the following,
-  //               - "Input(id="{id}").set_value("{input}")"
-  //               - "TextArea(id="{id}".set_value("{input}")"
-  //               - "Input(id="{id}").submit()"
-  //         """),
-  //     ChatEntry(role='system', content="The following elements are available in the website:\n" + '\n'.join([str(i) for i in elements])),
-  //     ChatEntry(role='user', content=f"I want to buy the latest iPhone."),
-  // ]
-  // output = json.loads(chat_api.chat(input_entries))
-  // explanation = output['explanation']
-  // actions = output['actions']
-
-  return groq.chat.completions.create({
-    messages: [
-      {
-        role: "system",
-        content: `You are tasked with coming up with a high level solution to perform the task specified by the user. Your response should beformatted as a json including {action:[Action], explanation: str} where the explanation is a concise explanation of the actions to take and the actions are any of the following
-          - {type: "input", id: "{id}", value: "{input}", action="set_value"}
-          - {type: "input", id: "{id}", action="submit"}
-
-        Try to keep your actions within the current webpage. The following elements are available on the website, and their HTML attributes:\n${elements}
-        `
-      },
-      {
-        role: "user",
-        content: content,
-      },
-    ],
-    model: "llama3-8b-8192",
-    response_format: { type: "json_object" },
-  });
-}
-      
-//     },
-//       {
-//         role: "user",
-//         content: content,
-//       },
-//     ],
-//     model: "llama3-8b-8192",
-//   });
-// }
-
-//==== GET DOM ====//
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    console.log(sender.tab ?
-                "from a content script:" + sender.tab.url :
-                "from the extension");
-    if (request)
-      sendResponse({ farewell: "received" });
-    
-    // addToChat(JSON.stringify(request))
-    // let result = request.elements;
-    // addToChat(request)
-    // addToChat(JSON.stringify(request));
-    saveElements(request);
-    // addToChat(result[0].tagName);
-  }
-);
-
-async function saveElements(result) {
-  // let elems = [];
-  // for (let i = 0; i < result.length; i++) {
-  //   if (result[i].tagName === 'input' || result[i].tagName === 'textarea' || result[i].tagName === 'button' || result[i].tagName === 'a' || result[i].tagName === 'div') {
-  //     elems.push("Tag: " + result[i].tagName + ", Attributes: " + result[i].attributes + ", innerText: " + result[i].innerText);
-  //   }
-  // }
-  // addToChat(request.greeting);
-  // let chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
-  // chatLog.push(message);
-  // console.log(chatLog)
-  localStorage.setItem("currentHTMLElements", JSON.stringify(result));
-  // addToChat(localStorage.getItem("currentHTMLElements"));
-  // addToChat(JSON.stringify(result));
-}
-
-//==== MAIN ====//
-// addToChat(instruction)
-// main()
-
-// call api
-// fetch webpage elements
-
-//==== mic attempts
-
-// export const injectMicrophonePermissionIframe = () => {
-//   const iframe = document.createElement("iframe");
-//   iframe.setAttribute("hidden", "hidden");
-//   iframe.setAttribute("id", "permissionsIFrame");
-//   iframe.setAttribute("allow", "microphone");
-//   iframe.src = chrome.runtime.getURL("sidebar.html");
-//   document.body.appendChild(iframe);
-// };
-
-// navigator.mediaDevices.getUserMedia({ audio: true })
-// .then(
-//   (stream) => {
-//     const audio = stream;
-//   })
-// .catch((err) => {
-//   console.error(`${err.name}: ${err.message}`);
-// })
-
-// import Vapi from "@vapi-ai/web";
-
-// const vapi = new Vapi("b1dcd146-1d59-4b93-802c-2ca2ce1c4462");
-
-// const assistantOptions = {
-//     name: "Vapi’s Pizza Front Desk",
-//     firstMessage: "Vappy’s Pizzeria speaking, how can I help you?",
-//     transcriber: {
-//       provider: "deepgram",
-//       model: "nova-2",
-//       language: "en-US",
-//     },
-//     voice: {
-//       provider: "playht",
-//       voiceId: "jennifer",
-//     },
-//     model: {
-//       provider: "openai",
-//       model: "gpt-4",
-//       messages: [
-//         {
-//           role: "system",
-//           content: `You are a voice assistant for Vappy’s Pizzeria, a pizza shop located on the Internet.
-
-//   Your job is to take the order of customers calling in. The menu has only 3 types
-//   of items: pizza, sides, and drinks. There are no other types of items on the menu.
-
-//   1) There are 3 kinds of pizza: cheese pizza, pepperoni pizza, and vegetarian pizza
-//   (often called "veggie" pizza).
-//   2) There are 3 kinds of sides: french fries, garlic bread, and chicken wings.
-//   3) There are 2 kinds of drinks: soda, and water. (if a customer asks for a
-//   brand name like "coca cola", just let them know that we only offer "soda")
-
-//   Customers can only order 1 of each item. If a customer tries to order more
-//   than 1 item within each category, politely inform them that only 1 item per
-//   category may be ordered.
-
-//   Customers must order 1 item from at least 1 category to have a complete order.
-//   They can order just a pizza, or just a side, or just a drink.
-
-//   Be sure to introduce the menu items, don't assume that the caller knows what
-//   is on the menu (most appropriate at the start of the conversation).
-
-//   If the customer goes off-topic or off-track and talks about anything but the
-//   process of ordering, politely steer the conversation back to collecting their order.
-
-//   Once you have all the information you need pertaining to their order, you can
-//   end the conversation. You can say something like "Awesome, we'll have that ready
-//   for you in 10-20 minutes." to naturally let the customer know the order has been
-//   fully communicated.
-
-//   It is important that you collect the order in an efficient manner (succinct replies
-//   & direct questions). You only have 1 task here, and it is to collect the customers
-//   order, then end the conversation.
-
-//   - Be sure to be kind of funny and witty!
-//   - Keep all your responses short and simple. Use casual language, phrases like "Umm...", "Well...", and "I mean" are preferred.
-//   - This is a voice conversation, so keep your responses short, like in a real conversation. Don't ramble for too long.`,
-//         },
-//       ],
-//     },
-//   };
-
-//   vapi.start(assistantOptions);
-
-})();
-
-// This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
-(() => {
-/*!************************!*\
-  !*** ./src/content.js ***!
-  \************************/
-__webpack_require__.r(__webpack_exports__);
-
-
-// Function to find input elements and textareas
-function findInputElements() {
-    const elements = [];
-
-    // Find input elements
-    const inputElements = document.querySelectorAll('input');
-    inputElements.forEach(el => {
-        if (el.id) {
-            elements.push({ id: el.id, tag: 'input', name: el.name || '' });
-        }
-    });
-
-    // Find textarea elements
-    const textareaElements = documesnt.querySelectorAll('textarea');
-    textareaElements.forEach(el => {
-        if (el.id) {
-            elements.push({ id: el.id, tag: 'textarea', name: el.name || '' });
-        }
-    });
-
-    return elements;
-}
-
-// Function to set the value of an input or textarea
-function setValue(elementId, value) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.value = value;
-        console.log(`Value set for element ${elementId}: ${value}`);
-    } else {
-        console.log(`Element with ID ${elementId} not found`);
-    }
-}
-
-// Function to submit a form
-function submitForm(formId) {
-    const form = document.getElementById(formId);
-    if (form) {
-        form.submit();
-        console.log(`Form with ID ${formId} submitted.`);
-    } else {
-        console.log(`Form with ID ${formId} not found.`);
-    }
-}
-
-// This function will execute a predefined set of actions
-function executeActions(actions) {
-    actions.forEach(action => {
-        if (action.type === "input") {
-            setValue(action.id, action.value);
-        } else if (action.type === "submit") {
-            submitForm(action.id);
-        }
-    });
-}
-
-// Function to be called when the "Debug" button is clicked
-function triggerDebugActions() {
-    // Log available elements on the page (optional)
-    const elements = findInputElements();
-    console.log("Elements found: ", JSON.stringify(elements, null, 2));  // Improved logging for better visibility
-
-    // Example actions to perform (these could be dynamic or predefined)
-    const actions = [
-        { type: "input", id: "input-field", value: "Debug Test" },  // Set value in input field
-        { type: "submit", id: "input-field-form" }  // Submit the form
-    ];
-
-    // Execute actions
-    executeActions(actions);
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const debugBtn = document.getElementById('debug-button');
-
-    console.log('doin stuff')
-
-    debugBtn.addEventListener("click", () => {
-        console.log('debug was clicked')
-        // Call the function defined in content.js to execute actions
-        triggerDebugActions();
-    });
-});
-
-})();
-
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	__webpack_require__("./src/index.js");
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/content.js");
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=main.js.map

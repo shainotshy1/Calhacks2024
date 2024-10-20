@@ -1,3 +1,4 @@
+
 // chrome.runtime.onInstalled.addListener((details) => {
 //   if (details.reason.search(/install/g) === -1) {
 //       return
@@ -94,3 +95,4 @@ chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo, tab) {
 
   }
 });
+
