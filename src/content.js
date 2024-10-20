@@ -1,7 +1,7 @@
 import { Groq } from "groq-sdk"
 
 export async function perform_action(action) {
-    console.log('called action', action.name);
+    console.log('called action', action);
 
     if (action.action === "redirect") {
         // Redirect to the specified URL
@@ -10,22 +10,26 @@ export async function perform_action(action) {
         return;  // Exit after redirection
     }
     
-    const element = document.getElementById(action.id);
+    //const element = document.getElementById("");
+    const elements = document.getElementsByTagName('*')
     
-    if (element) {
-        console.log(action.action, action.value);
-        if (action.action === "set_value") {
-            element.value = action.value
-            const form = element.closest('form');
-            if (form) {
-                form.submit();  // Submit the form
-            } else {
-                console.log('No form found for this element');
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        if (element.id === action.id || element.ariaLabel === action.ariaLabel) {
+            console.log(action.action, action.value);
+            if (action.action === "set_value") {
+                element.value = action.value;
+                const form = element.closest('form');
+                if (form) {
+                    form.submit();  // Submit the form
+                } else {
+                    console.log('No form found for this element');
+                }
+            } else if (action.action === "submit") {
             }
-        } else if (action.action === "submit") {
+        } else {
+            console.log('element not found for id', action.id);
         }
-    } else {
-        console.log('element not found for id', action.id);
     }
 }
 

@@ -35,14 +35,17 @@ function getDOM() {
   // return document.body.innerText;
   // return "hello";
 
-  const result = document.getElementsByTagName('input', 'button');
+  const result = document.getElementsByTagName('*');
   const elements = []
 
   for (let i = 0; i < result.length; i++) {
+    
       const e = result[i]
+
+      if (e.tagName == 'INPUT' || e.tagName == 'BUTTON') {
       let final = e.tagName;
 
-      if  (e.id || e.ariaLabel) {
+      if  (true) {//(e.id || e.ariaLabel) {
 
           final += '(';
 
@@ -55,9 +58,10 @@ function getDOM() {
 
           elements.push(final)
       }
+    }
   }
 
-  return elements
+  return elements;
 
   // let result = document.getElementsByTagName("*");
   // // let result = document.title;
@@ -141,14 +145,17 @@ chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo, tab) {
   //         ' })'
   // });
   if (changeInfo.status === "complete") {
-    const [{ result }] = await chrome.scripting.executeScript({
-      // await????
-      target: { tabId: tabId },
-      func: getDOM,
-    });
+    // Wait for 5 seconds before executing the script
+    setTimeout(async function () {
+      const [{ result }] = await chrome.scripting.executeScript({
+        target: { tabId: tabId },
+        func: getDOM,
+      });
 
-    chrome.runtime.sendMessage(result, function (response) {
-      console.log(response);
-    });
+      chrome.runtime.sendMessage(result, function (response) {
+        console.log('tab update', response);
+        console.log('refreshed elements', result);
+      });
+    }, 3000);  // 5000 ms = 5 seconds
   }
 });

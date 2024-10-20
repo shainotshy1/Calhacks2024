@@ -278,7 +278,7 @@ async function messageGroq(content) {
   await playText(explanation);
   addToChat(explanation);
   for (let i = 0; i < actions.length; i++) {
-    console.log(actions[i]);
+    console.log("THE ACTION", actions[i]);
     script_action(actions[i]);
   }
 }
@@ -286,18 +286,15 @@ async function messageGroq(content) {
 // export
 async function getGroqChatCompletion(content, elements) {
 
-  console.log('contacting groq v1.2');
-  console.log('elements', elements);
-
   return groq.chat.completions.create({
     messages: [
       {
         role: "system",
-        content: `You are tasked with coming up with a high level solution to perform the task specified by the user. Your response should beformatted as a json including {action:[Action], explanation: str} where the explanation is a concise explanation of the actions to take and the actions are any of the following
-          - {type: "input", id: "{id}", value: "{input}", action: "set_value"}
-          - {type: "input", id: "{id}", value: "{input}", action: "set_value_and_submit"}
-          - {type: "input", id: "{id}", action: "submit"}
-          - {action: "redirect", link: "{link}"}
+        content: `Your name is Janet and you are a helpful and personalized web assistant that can assist on using the web and automating tasks for the user. You are tasked with coming up with a high level solution to perform the task specified by the user. Your response should beformatted as a json including {action:[Action], explanation: str}. The explanation is a concise explanation of the actions to take and the actions which are meant to be spoken out loud to a user with main purpose of informing about the actions and explaining what is happening or even instruct how to do the actions.
+        And the actions could be any of the following (the actions should always include an id or an arialLabel unchanged from the element you are trying to interact with, with the purpose of being able to identify this element later on to perform the action.)
+          - {type: "input", id: "{id}", arialLabel: "{arialLabel}", value: "{input}", action: "set_value"}
+          - {type: "input", id: "{id}", arialLabel: "{arialLabel}", value: "{input}", action: "set_value_and_submit"}
+          - {type: "input", id: "{id}", arialLabel: "{arialLabel}", action: "submit"}
         
         Keep your actions within the current webpage. The following elements are available on the website, and their HTML attributes:\n${elements}
         `
@@ -354,10 +351,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 async function saveElements(result) {
+  console.log('saving elements', result)
   // let elems = [];
   // for (let i = 0; i < result.length; i++) {
   //   if (result[i].tagName === 'input' || result[i].tagName === 'textarea' || result[i].tagName === 'button' || result[i].tagName === 'a' || result[i].tagName === 'div') {
-  //     elems.push("Tag: " + result[i].tagName + ", Attributes: " + result[i].attributes + ", innerText: " + result[i].innerText);
+  //     elems.push("Tag: " + result[is].tagName + ", Attributes: " + result[i].attributes + ", innerText: " + result[i].innerText);
   //   }
   // }
   // addToChat(request.greeting);
