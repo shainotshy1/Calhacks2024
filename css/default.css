@@ -87,3 +87,7 @@ body {
   font-weight: 400;
   font-size: 1rem;
 }
+
+#audio-player {
+  display: none; /* Hide the audio player */
+}

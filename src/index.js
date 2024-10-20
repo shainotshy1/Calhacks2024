@@ -1,4 +1,5 @@
 "use strict";
+const axios = require("axios");
 
 //==== IMPORTS ====//
 // import OpenAI from "openai";
@@ -9,6 +10,90 @@
 // const Groq = require("./node_modules/groq-sdk");
 
 import { Groq } from "groq-sdk";
+
+async function transcribeAudio(audioData) {
+  let url_listen = "https://api.deepgram.com/v1/listen";
+  let DG_KEY = "45a33e236576b99bd01aeb4adff48b2c9674ff4b"
+
+  return new Promise((resolve, reject) => {
+    // Define request headers
+    const headers = {
+        Accept: "application/json",
+        Authorization: `Token ${DG_KEY}`,
+        "Content-Type": "audio/mp3", // Use the correct content type
+    };
+
+    // Define fetch options
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: audioData,
+    };
+
+    // Make the POST request using fetch
+    fetch(url_listen, options)
+        .then((response) => {
+        if (!response.ok) {
+            throw new Error("Failed to make request: " + response.statusText);
+        }
+        return response.json();
+        })
+        .then((data) => {
+        console.dir(data, { depth: null }); // Log the response data
+        resolve(data); // Return the data as JSON
+        })
+        .catch((error) => {
+        console.error("Error:", error);
+        reject(error); // Reject the promise with the error
+        });
+    });
+}
+
+async function audioToText(audioData) {
+  let transcription = await transcribeAudio(audioData);
+  const content = transcription.results.channels[0].alternatives[0].transcript;
+  console.log("Testing audio content");
+  console.log(content);
+  return content
+}
+
+async function playText(content) {
+  let url_speak = "https://api.deepgram.com/v1/speak?model=aura-asteria-en";
+  let DG_KEY = "45a33e236576b99bd01aeb4adff48b2c9674ff4b"
+  const config = {
+      headers: {
+        Authorization: `Token ${DG_KEY}`,
+        "Content-Type": "application/json",
+      },
+      responseType: "blob",
+    };
+    let data = {
+      text: content,
+    };
+
+    axios
+    .post(url_speak, data, config)
+    .then((response) => {
+        // Create a Blob from the response data
+        const blob = new Blob([response.data], { type: 'audio/mpeg' });
+
+        audioToText(response.data) // TESTING THIS FUNCTION
+
+        const url = URL.createObjectURL(blob);
+
+        // Set the source of the audio player to the Blob URL
+        const audioPlayer = document.getElementById('audio-player');
+        audioPlayer.src = url;
+
+        // Load the audio
+        audioPlayer.load();
+        audioPlayer.play();
+
+    })
+    .catch((error) => {
+        console.error("Error:", error.message);
+    });
+}
 
 //==== CHATLOG ====//
 function addToChat(s, is_human, do_save = true) {
@@ -90,7 +175,8 @@ async function messageGroq(content) {
   // Print the completion returned by the LLM.
   //   console.log(chatCompletion.choices[0]?.message?.content || "");
   const s = chatCompletion.choices[0]?.message?.content || "";
-  addToChat(s, false);
+  await playText(s);
+  addToChat(s);
 }
 
 // export
