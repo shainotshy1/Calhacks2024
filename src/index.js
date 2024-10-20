@@ -161,6 +161,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   chatClear.addEventListener("click", clearChatLog);
 });
+
+
+
 // const inputs = document.getElementById("input-field").elements;
 // const input = inputs[0];
 
@@ -197,6 +200,11 @@ async function getGroqChatCompletion(content) {
     model: "llama3-8b-8192",
   });
 }
+
+
+
+  
+
 
 //==== MAIN ====//
 // addToChat(instruction)

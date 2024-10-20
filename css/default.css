@@ -11,9 +11,34 @@ body {
   display: grid;
   grid-template-rows: 1fr auto;
   height: 100%;
+  /* overflow-y: scroll; */
 }
 
-button {
+button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none; /* Remove default border */
+  background: transparent; /* Make background transparent */
+  cursor: pointer;
+  padding: 0; /* Remove padding */
+}
+
+button img {
+  width: 24px; /* Adjust width as needed */
+  height: 24px; /* Adjust height as needed */
+}
+
+#send-icon img {
+  background: url('images/paperplane.png') no-repeat center / cover;
+  width: 25px;
+  height: 25px;
+  margin-left: 15px;
+}
+
+
+
+/* button {
   padding: 10px 20px;
   font-size: 1rem;
   border-radius: 20px;
@@ -21,11 +46,15 @@ button {
   color: white;
   background: #2f242c;
   cursor: pointer;
-}
+} */
 
 #chat-container {
-  padding: 20px;
+  padding: 10px;
   overflow-y: scroll;
+  display: flex; /* Enable Flexbox layout */
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
 }
 
 ::-webkit-scrollbar {
@@ -47,14 +76,39 @@ button {
   display: grid;
   grid-template-columns: 1fr auto auto;
   gap: 20px;
-  padding: 20px;
+  padding: 25px
 }
 
 #input-field {
   font-family: 'IBM Plex Sans', sans-serif;
   border-radius: 20px;
   font-size: 1rem;
-  padding: 10px;
+  padding: 10px 5px 10px 10px;
+  width: 100%;
+  margin-right: 50px;
+  /* padding: 10px; */
+}
+
+#input-container {
+  position: relative; /* Allows positioning within container */
+  flex-grow: 1; /* Take available space */
+}
+
+#record-icon {
+  position: absolute; /* Absolute positioning within input container */
+  right: 10px; /* Align to the right inside the input field */
+  top: 50%;
+  transform: translateY(-50%); /* Center vertically */
+  border: none; /* Remove default border */
+  background: transparent; /* Transparent background */
+  cursor: pointer;
+  padding: 0; /* Remove padding */
+}
+
+#record-icon img {
+  background: url('images/microphone.png') no-repeat center / cover;
+  width: 18px;
+  height: 25px;
 }
 
 #recordingInterface, #stoppedInterface {
@@ -75,6 +129,8 @@ button {
   border-radius: 20px;
   margin-right: 50px;
   margin-top: 25px;
+
+
 }
 
 h1 {
@@ -83,6 +139,7 @@ h1 {
   font-size: 2rem;
   margin: 0;
   padding: 2rem 0px;
+  text-align: center;
 }
 
 body {
@@ -94,3 +151,4 @@ body {
 #audio-player {
   display: none; /* Hide the audio player */
 }
+
