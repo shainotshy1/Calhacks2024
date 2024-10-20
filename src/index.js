@@ -95,6 +95,11 @@ async function playText(content) {
     });
 }
 
+function scrollToBottom() {
+  const chat = document.getElementById('mainpad');
+  chat.scrollTop = chat.scrollHeight;
+}
+
 //==== CHATLOG ====//
 function addToChat(s, is_human, do_save = true) {
   const newDiv = document.createElement("div");
@@ -106,6 +111,7 @@ function addToChat(s, is_human, do_save = true) {
   const currentDiv = document.getElementById("chatlog");
   currentDiv.appendChild(newDiv);
   if (do_save) saveToLocalStorage([s, is_human]);
+  scrollToBottom();
 }
 
 function saveToLocalStorage(message) {

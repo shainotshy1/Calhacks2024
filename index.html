@@ -21,9 +21,11 @@
   <body>
     <div id="mainpad">
       <div id="container">
-        <div id="chat">
+        <div id="chat-container">
           <h1 class="sidebar-h1">Hi, I'm Janet. How can I help?</h1>
-          <div id="chatlog"></div>
+          <div id="chat">
+            <div id="chatlog"></div>
+          </div>
         </div>
 
         <form id="input-field-form">
@@ -35,15 +37,15 @@
           <!-- <button id="start-recording">start</button>
         <button id="pause-recording">pause</button>
         <button id="stop-recording">stop</button> -->
-          <button type="button" id="clear-chat">Clear chat history</button>
+          <button type="button" id="clear-chat">Clear</button>
           <!-- <button id="debug-button">Debug</button> -->
         </form>
 
         <audio id="audio-player" controls>
-          <source id="audio-source" src="" type="audio/mpeg">
+          <source id="audio-source" src="" type="audio/mpeg" />
         </audio>
 
-        <p id="log"></p>
+        <!-- <p id="log"></p> -->
 
         <!-- <form action="" method="get" id="input-field">
       <div id="input-field-div">

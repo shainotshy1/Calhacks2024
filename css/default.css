@@ -1,14 +1,16 @@
 #mainpad {
-  padding: 30px;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
 }
 
 #container {
-  /* display: flex; */
-  /* flex-direction: column; */
-  height: 100vh;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 100%;
 }
 
 button {
@@ -19,30 +21,38 @@ button {
   color: white;
   background: #2f242c;
   cursor: pointer;
-  margin: 10px;
 }
 
-#chat {
-  overflow: auto;
-  height: calc(100vh - 100px);
+#chat-container {
+  padding: 20px;
+  overflow-y: scroll;
 }
 
-#chat::-webkit-scrollbar {
-  display: none;
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+  cursor: pointer;
 }
 
 #input-field-form {
+  height: 40px;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 20px;
   padding: 20px;
-  height: 60px;
-  background-color: white;
-  flex-shrink: 0;
 }
 
 #input-field {
   font-family: 'IBM Plex Sans', sans-serif;
   border-radius: 20px;
-  /* min-height: 45px; */
-  min-width: 200px;
   font-size: 1rem;
   padding: 10px;
 }
@@ -67,19 +77,12 @@ button {
   margin-top: 25px;
 }
 
-#input-field-form {
-  position: fixed; 
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-
 h1 {
   font-family: 'IBM Plex Serif', serif;
   font-weight: 400;
-  margin-top: 60px;
-  margin-bottom: 60px;
   font-size: 2rem;
+  margin: 0;
+  padding: 2rem 0px;
 }
 
 body {
