@@ -1,0 +1,161 @@
+let runCookieConsentBanner = function() {
+    const supportedDomains = [
+        'alaskaair.com',
+        'alaskacargo.com',
+        'convertlanguage.com',
+        'alaskaaircargoconnections.com'
+    ];
+    const consentExpirationCookieName = 'AS_COOKIE_CONSENT_EXPIRATION';
+    const consentDuration = 60 * 60 * 24 * 30 * 18; // Cookie will expire in ~18 months (month == 30 days)
+    const consentMessage = `We use cookies to personalize content and ads, provide social share features, and analyze our traffic. To deliver personalized ads, we share information about your use of our site with our advertising and analytics partners. View our cookie policy <a href="https://www.alaskaair.com/content/legal/privacy-policy#cookie-policy" target="_blank" rel="noopener noreferrer nofollow">here</a> to learn how to manage your cookie settings. <a aria-label="Privacy Policy visit this link to learn more about cookies" href="https://www.alaskaair.com/content/legal/privacy-policy?lid=footer:privacyPolicy" rel="noopener noreferrer nofollow" target="_blank">Privacy Policy</a>`;
+    const ctaLabel = 'Dismiss';
+    const bannerBackgroundColor = '#01426A';
+    const bannerTextColor = '#ffffff';
+    const ctaColor = '#ffffff';
+    const ctaTextColor = '#0074c8';
+    const consentBannerRootId = 'aag-cookie-consent';
+
+    // Ensure we are on a supported domain
+    let currentDomain = supportedDomains.find(d => window.location.hostname.includes(d));
+    if (!currentDomain) {
+        return null;
+    }
+
+    // First, remove any cookie consent banner that may already be in DOM
+    let banner = document.getElementById(consentBannerRootId);
+    if (banner) banner.parentNode.removeChild(banner);
+
+    // If in a mobile app web view, get out of here!
+    if (navigator.userAgent &&
+        (navigator.userAgent.includes('ALKApp/iOS') || navigator.userAgent.includes('ALKApp/Android'))) {
+        return null;
+    }
+
+    // Get cookie consent expiration timestamp
+    let expirationDate = null;
+    try {
+        let fullCookie = `; ${document.cookie}`;
+        let parts = fullCookie.split(`; ${consentExpirationCookieName}=`);
+        if (parts.length === 2) {
+            let timestamp = parts.pop().split(';').shift();
+            expirationDate = new Date(Number.parseInt(timestamp));
+        }
+    } catch (e) {
+        // An issue happened while reading the consent cookie.
+        // Just skip it
+    }
+
+    // If haven't reached expiration, get out of here!
+    if (expirationDate && Date.now() < expirationDate) {
+        return null;
+    }
+
+    // Otherwise, past expiration or no expiration set. Show consent banner
+
+    let style = document.createElement('style');
+    style.innerHTML = `
+        #${consentBannerRootId} {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: inherit;
+            background-color: ${bannerBackgroundColor};
+            z-index: 2147483647;
+            box-shadow: 0px -5px 5px rgb(0 0 0 / 50%);
+        }
+        #${consentBannerRootId}.accepted {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 1s, opacity 1s linear;
+        }
+        #${consentBannerRootId} .aag-cookie-consent-content {
+            display: flex;
+            justify-content: space-between;
+            padding: 1em 2em;
+            align-items: flex-end;
+        }
+        #${consentBannerRootId} .aag-cookie-consent-content .aag-consent-message {
+            margin: 0 2em 0 0;
+            padding: 0;
+            font-family: "AS Circular", "Helvetica Neue", Arial, sans-serif;
+            font-size: 16px;
+            font-variant-ligatures: none;
+            font-weight: 500;
+            color: ${bannerTextColor};
+        }
+        #${consentBannerRootId} .aag-cookie-consent-content .aag-consent-message a {
+            color: ${bannerTextColor};
+            text-decoration: underline;
+        }
+        #${consentBannerRootId} .aag-cookie-consent-content .aag-consent-cta {
+            padding: 8px 24px 8px 24px;
+            background-color: ${ctaColor};
+            border: 1px solid ${ctaColor};
+            border-radius: 0.375rem;
+            color: ${ctaTextColor};
+            text-decoration: none;
+            text-wrap: nowrap;
+            transition: all 0.15s ease;
+        }
+        @media (max-width: 768px) {
+            #${consentBannerRootId} .aag-cookie-consent-content {
+                flex-direction: column;
+                align-items: stretch; 
+            }
+            #${consentBannerRootId} .aag-cookie-consent-content .aag-consent-message {
+                margin: 0 0 1em 0;
+            }
+            #${consentBannerRootId} .aag-cookie-consent-content .aag-consent-cta {
+                width: 100%; 
+            }
+        }
+        `;
+
+    // Build consent banner
+    let bannerRootElement = document.createElement('div');
+    bannerRootElement.setAttribute('id', consentBannerRootId);
+    bannerRootElement.setAttribute('role', 'dialog');
+    bannerRootElement.setAttribute('aria-live', 'polite');
+    bannerRootElement.setAttribute('aria-describedby', 'cookie-consent-message');
+    bannerRootElement.setAttribute('aria-label', 'cookie consent');
+    bannerRootElement.appendChild(style); // Banner to hold its own style element
+
+    let bannerContentElement = document.createElement('div');
+    bannerContentElement.setAttribute('class', 'aag-cookie-consent-content');
+    bannerRootElement.appendChild(bannerContentElement);
+
+    let consentMessageElement = document.createElement('p');
+    consentMessageElement.setAttribute('id', 'cookie-consent-message');
+    consentMessageElement.setAttribute('class', 'aag-consent-message');
+    consentMessageElement.innerHTML = consentMessage;
+    bannerContentElement.appendChild(consentMessageElement)
+
+    let consentCtaElement = document.createElement('button');
+    consentCtaElement.setAttribute('class', 'aag-consent-cta');
+    consentCtaElement.setAttribute('aria-label', 'allow cookies');
+    consentCtaElement.innerText = ctaLabel;
+    consentCtaElement.addEventListener('click', () => {
+
+        // Close banner
+        let banner = document.getElementById(consentBannerRootId);
+        banner.classList.add('accepted');
+
+
+        // (Re)set consent expiration cookie
+        document.cookie = `${consentExpirationCookieName}=${Date.now() + consentDuration * 1000}; domain=${currentDomain}; max-age=${consentDuration}`;
+    })
+    bannerContentElement.appendChild(consentCtaElement);
+
+    document.body.prepend(bannerRootElement);
+    return null;
+}
+
+let cookieConsentInterval = null;
+let handleCookieConsentBanner = function() {
+    if (document.body) {
+        runCookieConsentBanner();
+        if (cookieConsentInterval) clearInterval(cookieConsentInterval);
+    }
+}
+
+cookieConsentInterval = setInterval(handleCookieConsentBanner, 500);

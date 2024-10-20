@@ -29,14 +29,15 @@ button img {
   height: 24px; /* Adjust height as needed */
 }
 
+svg {
+  stroke: #736ced;
+}
+
 #send-icon img {
-  background: url('images/paperplane.png') no-repeat center / cover;
-  width: 25px;
+  /* background: url('images/paperplane.png') no-repeat center / cover; */
   height: 25px;
   margin-left: 15px;
 }
-
-
 
 /* button {
   padding: 10px 20px;
@@ -51,10 +52,10 @@ button img {
 #chat-container {
   padding: 10px;
   overflow-y: scroll;
-  display: flex; /* Enable Flexbox layout */
-  flex-direction: column; /* Stack items vertically */
-  align-items: center; /* Center items horizontally */
-  justify-content: center; /* Center items vertically */
+  /* display: flex; Enable Flexbox layout */
+  /* flex-direction: column; Stack items vertically */
+  /* align-items: center; Center items horizontally */
+  /* justify-content: center; Center items vertically */
 }
 
 ::-webkit-scrollbar {
@@ -106,7 +107,7 @@ button img {
 }
 
 #record-icon img {
-  background: url('images/microphone.png') no-repeat center / cover;
+  /* background: url('images/microphone.png') no-repeat center / cover; */
   width: 18px;
   height: 25px;
 }
@@ -129,8 +130,11 @@ button img {
   border-radius: 20px;
   margin-right: 50px;
   margin-top: 25px;
+}
 
-
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
 }
 
 h1 {

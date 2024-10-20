@@ -160,9 +160,97 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   chatClear.addEventListener("click", clearChatLog);
+
+  const recordButton = document.getElementById('record-icon');
+  const audioPlayer = document.getElementById('audio-player');
+
+  let mediaRecorder;
+  let audioChunks = [];
+  let isRecording = false;
+
+  // Check if button is being accessed correctly
+  console.log('Record button:', recordButton);
+
+  // Function to handle starting and stopping the recording
+  async function toggleRecording() {
+    console.log('Button clicked!'); // Log to check if the button is clicked
+
+    if (!isRecording) {
+      try {
+        // Start recording
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        console.log('Audio stream accessed:', stream);
+
+        mediaRecorder = new MediaRecorder(stream);
+
+        // Start capturing audio
+        mediaRecorder.start();
+        isRecording = true;
+        recordButton.querySelector('img').style.width = '25px';
+        recordButton.querySelector('img').src = "images/stop.circle.svg";
+        recordButton.querySelector('img').alt = "Stop Recording";
+        // recordButton.textContent = 'Stop Recording'; // Change button text
+
+        console.log('Recording started');
+
+        // Store audio data chunks
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            audioChunks.push(event.data);
+          }
+        };
+
+        // Handle stopping the recording
+        mediaRecorder.onstop = async () => {
+          console.log('Recording stopped');
+
+          // Create a Blob from audio chunks
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+
+          // Create a URL for the audio file
+          const audioUrl = URL.createObjectURL(audioBlob);
+          audioPlayer.src = audioUrl; // Set the audio player source
+
+          // Create an anchor element to trigger download
+          // const downloadLink = document.createElement('a');
+          // downloadLink.href = audioUrl;
+          // downloadLink.download = 'recording.webm';
+          // downloadLink.click(); // Trigger the download automatically
+
+          let s = await audioToText(audioBlob);
+          addToChat(s, true);
+          messageGroq(s);
+
+          // Clear audio chunks
+          audioChunks = [];
+
+          // Reset button state
+          isRecording = false;
+          // recordButton.textContent = 'Start Recording'; // Reset button text
+        };
+
+      } catch (error) {
+        console.error('Error accessing audio stream:', error);
+      }
+
+    } else {
+      // Stop recording
+      mediaRecorder.stop();
+      isRecording = false;
+      recordButton.querySelector('img').style.width = '18px';
+      recordButton.querySelector('img').src = "images/mic.svg";
+      recordButton.querySelector('img').alt = "Record";
+    }
+  }
+
+  // Start/stop recording when the record button is clicked
+  if (recordButton) {
+    recordButton.addEventListener('click', toggleRecording);
+    console.log('Event listener added to record button');
+  } else {
+    console.error('Record button not found');
+  }
 });
-
-
 
 // const inputs = document.getElementById("input-field").elements;
 // const input = inputs[0];
@@ -200,120 +288,9 @@ async function getGroqChatCompletion(content) {
     model: "llama3-8b-8192",
   })
 }
-
-// var connection = indexedDB.open("audioDB", 1);
-// connection.onsuccess = (e) => {
-//   var db = e.target.result;
-//   var objectStore = db.createObjectStore("audioDB", {});
-// };
-
   
 document.addEventListener('DOMContentLoaded', function() {
-  const recordButton = document.getElementById('record-icon');
-  const audioPlayer = document.getElementById('audio-player');
-
-  let mediaRecorder;
-  let audioChunks = [];
-  let isRecording = false;
-
-  // Check if button is being accessed correctly
-  console.log('Record button:', recordButton);
-
-  // Function to handle starting and stopping the recording
-  async function toggleRecording() {
-    console.log('Button clicked!'); // Log to check if the button is clicked
-
-    if (!isRecording) {
-      try {
-        // Start recording
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        console.log('Audio stream accessed:', stream);
-
-        mediaRecorder = new MediaRecorder(stream);
-
-        // Start capturing audio
-        mediaRecorder.start();
-        isRecording = true;
-        recordButton.textContent = 'Stop Recording'; // Change button text
-
-        console.log('Recording started');
-
-        // Store audio data chunks
-        mediaRecorder.ondataavailable = (event) => {
-          if (event.data.size > 0) {
-            audioChunks.push(event.data);
-          }
-        };
-
-        // Handle stopping the recording
-        mediaRecorder.onstop = async function() {
-          console.log('Recording stopped');
-
-          // Create a Blob from audio chunks
-          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-
-          // Create a URL for the audio file
-          const audioUrl = URL.createObjectURL(audioBlob);
-          audioPlayer.src = audioUrl; // Set the audio player source
-
-          // Create an anchor element to trigger download
-          // const downloadLink = document.createElement('a');
-          // downloadLink.href = audioUrl;
-          // downloadLink.download = 'recording.webm';
-          // downloadLink.click(); // Trigger the download automatically
-
-          // var connection = indexedDB.open("audioDB", 1);
-          // connection.onsuccess = (e) => {
-          //   var db = e.target.result;
-          //   var transaction = db.transaction(["audioDB"], "readwrite");
-          //   var store = transaction.objectStore("audioDB");
-          //   var request = store.add(audioBlob, "audio");
-          //   request.onsuccess = (e) => {
-          //     console.log("Audio added to database");
-          //   };
-          //   request.onerror = (e) => {
-          //     console.error("Error adding audio to database");
-          //   };
-          // };
-          
-          let s = await audioToText(audioBlob);
-          addToChat(s, true);
-          messageGroq(s);
-
-          // s = s.then((value) => {
-          //   addToChat(s, true);
-          //   messageGroq(s);
-          // });
-            
-          // addToChat(s, true);
-          // messageGroq(s);
-
-
-          // Clear audio chunks
-          audioChunks = [];
-
-          // Reset button state
-          isRecording = false;
-          // recordButton.textContent = 'Start Recording'; // Reset button text
-        };
-
-      } catch (error) {
-        console.error('Error accessing audio stream:', error);
-      }
-
-    } else {
-      // Stop recording
-      mediaRecorder.stop();
-    }
-  }
-
-  // Start/stop recording when the record button is clicked
-  if (recordButton) {
-    recordButton.addEventListener('click', toggleRecording);
-    console.log('Event listener added to record button');
-  } else {
-    console.error('Record button not found');
-  }
+  
 });
 
   
