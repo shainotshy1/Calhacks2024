@@ -1,0 +1,513 @@
+//tealium universal tag - utag.343 ut4.0.202410102122, Copyright 2024 Tealium.com Inc. All Rights Reserved.
+if(typeof JSON!=='object'){JSON={};}
+(function(){'use strict';var rx_one=/^[\],:{}\s]*$/,rx_two=/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,rx_three=/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,rx_four=/(?:^|:|,)(?:\s*\[)+/g,rx_escapable=/[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,rx_dangerous=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;function f(n){return n<10?'0'+n:n;}
+function this_value(){return this.valueOf();}
+if(typeof Date.prototype.toJSON!=='function'){Date.prototype.toJSON=function(){return isFinite(this.valueOf())?this.getUTCFullYear()+'-'+
+f(this.getUTCMonth()+1)+'-'+f(this.getUTCDate())+'T'+f(this.getUTCHours())+':'+f(this.getUTCMinutes())+':'+
+f(this.getUTCSeconds())+'Z':null;};Boolean.prototype.toJSON=this_value;Number.prototype.toJSON=this_value;String.prototype.toJSON=this_value;}
+var gap,indent,meta,rep;function quote(string){rx_escapable.lastIndex=0;return rx_escapable.test(string)?'"'+string.replace(rx_escapable,function(a){var c=meta[a];return typeof c==='string'?c:'\\u'+('0000'+a.charCodeAt(0).toString(16)).slice(-4);})+'"':'"'+string+'"';}
+function str(key,holder){var i,k,v,length,mind=gap,partial,value=holder[key];if(value&&typeof value==='object'&&typeof value.toJSON==='function'){value=value.toJSON(key);}
+if(typeof rep==='function'){value=rep.call(holder,key,value);}
+switch(typeof value){case'string':return quote(value);case'number':return isFinite(value)?String(value):'null';case'boolean':case'null':return String(value);case'object':if(!value){return'null';}
+gap+=indent;partial=[];if(Object.prototype.toString.apply(value)==='[object Array]'){length=value.length;for(i=0;i<length;i+=1){partial[i]=str(i,value)||'null';}
+v=partial.length===0?'[]':gap?'[\n'+gap+partial.join(',\n'+gap)+'\n'+mind+']':'['+partial.join(',')+']';gap=mind;return v;}
+if(rep&&typeof rep==='object'){length=rep.length;for(i=0;i<length;i+=1){if(typeof rep[i]==='string'){k=rep[i];v=str(k,value);if(v){partial.push(quote(k)+(gap?': ':':')+v);}}}}else{for(k in value){if(Object.prototype.hasOwnProperty.call(value,k)){v=str(k,value);if(v){partial.push(quote(k)+(gap?': ':':')+v);}}}}
+v=partial.length===0?'{}':gap?'{\n'+gap+partial.join(',\n'+gap)+'\n'+mind+'}':'{'+partial.join(',')+'}';gap=mind;return v;}}
+if(typeof JSON.stringify!=='function'){meta={'\b':'\\b','\t':'\\t','\n':'\\n','\f':'\\f','\r':'\\r','"':'\\"','\\':'\\\\'};JSON.stringify=function(value,replacer,space){var i;gap='';indent='';if(typeof space==='number'){for(i=0;i<space;i+=1){indent+=' ';}}else if(typeof space==='string'){indent=space;}
+rep=replacer;if(replacer&&typeof replacer!=='function'&&(typeof replacer!=='object'||typeof replacer.length!=='number')){throw new Error('JSON.stringify');}
+return str('',{'':value});};}}());try{(function(id,loader,u){try{u=utag.o[loader].sender[id]={"id":id};}catch(e){u=utag.sender[id];}
+utag.globals=window.utag.globals||{};u.ev={"all":1};u.server_domain="tealiumiq.com";u.server_prefix="";u.tag_config_server="";u.tag_config_sampling="100"||"100";if(utag.cfg.utagdb){u.tag_config_sampling="100";}
+u.tag_config_region="default"||"default";u.region="";u.performance_timing_count=0;u.account=utag.cfg.utid.split("/")[0];u.data_source="";switch(utag.data["ut.profile"]){case"main":u.data_source="vyroyg";break;case"mobileweb":u.data_source="bwxh6x";break;case"flightpass":u.data_source="q5m7hx";break;}
+u.profile="main"||utag.cfg.utid.split("/")[1];u.visitor_service_override="";u.request_increment=1;u.iab_v20_compliance=true;u.tc_string="";if(u.tag_config_server.indexOf("-collect."+u.server_domain)>1){u.server_prefix=u.tag_config_server.split("collect."+u.server_domain)[0];if(u.tag_config_server.indexOf("/i.gif")<0){u.tag_config_server="https://"+[u.server_prefix+"collect."+u.server_domain,u.account,u.profile,"2","i.gif"].join("/");}}
+if(u.tag_config_server===""){if(u.tag_config_region==="default"){u.tag_config_server="https://"+[u.server_prefix+"collect."+u.server_domain,u.account,u.profile,"2","i.gif"].join("/");}else{u.tag_config_server="https://"+[u.server_prefix+"collect-"+u.tag_config_region+"."+u.server_domain,u.account,u.profile,"2","i.gif"].join("/");}}
+if(u.tag_config_server.indexOf("-collect-")>-1){u.server_prefix=u.tag_config_server.split("collect-")[0];}
+if(u.tag_config_region!=="default"&&u.tag_config_server.indexOf(u.server_prefix+"collect."+u.server_domain)>0){u.tag_config_server=u.tag_config_server.replace(u.server_prefix+"collect."+u.server_domain,u.server_prefix+"collect-"+u.tag_config_region+"."+u.server_domain);u.region=u.tag_config_region;}
+u.data_enrichment="frequent";u.profile_specific_vid=0;u.enrichment_polling=1;u.enrichment_polling_delay=500;u.do_enrichment=function(){};u.deepCopy=function(input){var key,copy;if(typeof input==="object"&&input!==null){if(utag.ut.typeOf(input)==="array"){copy=[];}else{copy={};}
+for(key in input){if(typeof input[key]==="object"){copy[key]=u.deepCopy(input[key]);}else{copy[key]=input[key];}}}else{copy=input;}
+return copy;}
+var q=u.tag_config_server.indexOf("?");if(q>0&&(q+1)==u.tag_config_server.length){u.tag_config_server=u.tag_config_server.replace("?","");}
+u.server_list=u.tag_config_server.split("|");u.enrichment_enabled={};u.get_account_profile=function(s){var p;if(u.visitor_service_override||u.tag_config_server.indexOf("tealiumiq.com")===-1){p=[u.tag_config_server.split("//")[1],u.account,u.profile]}else{p=s.substring(s.indexOf(u.server_domain)).split("/");}
+return p;};function infixParameters(url,params){var updated_url,url_parts=url.split("?");if(params){if(url_parts[1]===undefined){updated_url=url+"?"+params;}else if(url_parts[1]===""){updated_url=url+params;}else{updated_url=url_parts[0]+"?"+params+"&"+url_parts[1];}}else{updated_url=url;}
+return updated_url;}
+u.is_in_sample_group=function(b){var group="100";if(u.tag_config_sampling===""||u.tag_config_sampling==="100"){return true;}
+if(b["cp.utag_main_dc_group"]){group=b["cp.utag_main_dc_group"];}else{group=Math.floor(Math.random()*100)+1;utag.loader.SC("utag_main",{"dc_group":group});}
+if(parseInt(group)<=parseInt(u.tag_config_sampling)){return true;}else{return false;}};u.get_performance_timing=function(b){var t,timing;var data={};function subtract(val1,val2){var difference=0;if(val1>val2){difference=val1-val2;}
+return difference;}
+if(typeof localStorage!="undefined"&&JSON.parse&&window.performance&&window.performance.timing){t=window.performance.timing;timing=localStorage.getItem("tealium_timing");if(timing!==null&&timing!=="{}"&&typeof b!=="undefined"&&u.performance_timing_count===0){utag.ut.merge(b,utag.ut.flatten({timing:JSON.parse(timing)}),1);}}else{return;}
+u.performance_timing_count++;for(var k in t){if((k.indexOf("dom")===0||k.indexOf("load")===0)&&t[k]===0&&u.performance_timing_count<20){setTimeout(u.get_performance_timing,1000);}}
+data["domain"]=location.hostname+"";data["pathname"]=location.pathname+"";data["query_string"]=(""+location.search).substring(1);data["timestamp"]=(new Date()).getTime();data["dns"]=subtract(t.domainLookupEnd,t.domainLookupStart);data["connect"]=subtract(t.connectEnd,t.connectStart);data["response"]=subtract(t.responseEnd,t.responseStart);data["dom_loading_to_interactive"]=subtract(t.domInteractive,t.domLoading);data["dom_interactive_to_complete"]=subtract(t.domComplete,t.domInteractive);data["load"]=subtract(t.loadEventEnd,t.loadEventStart);data["time_to_first_byte"]=subtract(t.responseStart,t.connectEnd);data["front_end"]=subtract(t.loadEventStart,t.responseEnd);data["fetch_to_response"]=subtract(t.responseStart,t.fetchStart);data["fetch_to_complete"]=subtract(t.domComplete,t.fetchStart);data["fetch_to_interactive"]=subtract(t.domInteractive,t.fetchStart);try{localStorage.setItem("tealium_timing",JSON.stringify(data));}catch(e){utag.DB(e);}};u.validateProtocol=function(address,force_ssl){if(/^https?:\/\//i.test(address)){if(force_ssl){if(/^http:\/\//i.test(address)){address=address.toLowerCase().replace("http","https");}}}else{if(/^\/\//.test(address)){if(force_ssl){address="https:"+address;}else{address=location.protocol+address;}
+}else{if(force_ssl){address="https://"+address;}else{address=location.protocol+"//"+address;}}}
+return address;}
+u.map={};u.extend=[function(a,b){try{if((typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true'&&b['ut.profile'].toString().toLowerCase()!='mobileweb'.toLowerCase())||(typeof b['loadrule_id4']!='undefined'&&b['loadrule_id4']=='true'&&b['ut.profile'].toString().toLowerCase()=='mobileweb'.toLowerCase()&&b['ut.env'].toString().toLowerCase()!='prod'.toLowerCase())){window.pluginsObj={};pluginsObj.split=new Function("l","d",""
++"var i,x=0,a=new Array;while(l){i=l.indexOf(d);i=i>-1?i:l.length;a[x"
++"++]=l.substring(0,i);l=l.substring(i+d.length);}return a");pluginsObj.maskEmail=new Function("addr",""
++"var pluginsObj=this;if(addr.substring(0,3) != '^v^'){var str='';addr = addr."
++"toLowerCase();for(var i=0;i<addr.length;i++){str+=pluginsObj.encode(addr.subst"
++"ring(i,i+1));}return '^v^'+str;}else return addr;");pluginsObj.encode=new Function("char",""
++"var alphabet = '0123456789abcdefghijklmnopqrstuvwxyz-_.@^', hashVal"
++"ue = 'r8y2dx#v3~o04fc1nhq7Ikuw6p_bj-t5maz9lges^', index = alphabet."
++"indexOf(char);if(index != -1)return hashValue.substring(index,index"
++"+1);else return char;");pluginsObj.getCookieValue=function(a){var b=document.cookie.match('(^|[^;]+)\\s*'+a+'\\s*=\\s*([^;]+)');return b?b.pop():'';};pluginsObj.getValOnce=new Function("v","c","e","t",""
++"var pluginsObj=this,a=new Date,v=v?v:'',c=c?c:'s_gvo',e=e?e:0,i=t=='m'?6000"
++"0:86400000,k=window.pluginsObj.getCookieValue(c);if(v){a.setTime(a.getTime()+e*i);document.cookie=c+'='+v;}"
++"return v==k?'':v");}}catch(e){utag.DB(e)}},function(a,b){try{if((typeof b['cp.price_matrix_selection']!='undefined'&&b['cp.price_matrix_selection']!=''&&typeof b['cp.travelersNumber']!='undefined'&&b['cp.travelersNumber']!=''&&typeof b['main_upsell_selection_cart']!='undefined'&&b['main_upsell_selection_cart']!=''&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){utag.DB("---Extension: EventStream | Optimizely Events | Main to First");var setCookie=function(name,value,days){var d=new Date();d.setTime(d.getTime()+24*60*60*1000*days);document.cookie=name+"="+value+";path=/;domain=.alaskaair.com;expires="+d.toGMTString();}
+var deleteCookie=function(name){setCookie(name,'',-1);}
+var wipePreviousCookies=function(){deleteCookie("optimizely_main_revenue");deleteCookie("optimizely_main_quantity");deleteCookie("optimizely_main_upsellRevenue");deleteCookie("optimizely_main_cartUpsell");utag.DB("---Extension: EventStream | Optimizely Events | Main to First: Deleted main cookies");}
+var processMainToFirst=function(priceMatrixSelection,passengers,udo)
+{var lowestPrice,selection,options,optionPrice,selectedPrice,firstPrice;var selections=typeof priceMatrixSelection==="string"?priceMatrixSelection.split(','):(Array.isArray(priceMatrixSelection)?priceMatrixSelection:[]);udo.optimizely_firstClass_revenue=0;udo.optimizely_firstClass_quantity=0;udo.optimizely_firstClass_upsellRevenue=0;udo.optimizely_firstClass_cartUpsell=0;selections.forEach(function(segment,segmentIndex,segments){lowestPrice=Number.MAX_VALUE;selection=segment.split(':')[1];options=segment.split(':')[0].trim().split('|');options.forEach(function(option){optionPrice=parseInt(option.split('-')[1]);if(optionPrice<lowestPrice)lowestPrice=optionPrice;if(option.split('-')[0]==="6"||option.split('-')[0]==="7")
+{firstPrice=optionPrice;}});selectedPrice=parseInt(selection.split('-')[1]);udo.optimizely_firstClass_revenue+=((firstPrice*passengers)*100);udo.optimizely_firstClass_upsellRevenue+=((firstPrice-lowestPrice)*passengers*100);udo.optimizely_firstClass_cartUpsell+=((firstPrice-selectedPrice)*passengers*100);});udo.optimizely_firstClass_quantity=udo['cp.optimizely_main_quantity'];}
+try{if(b&&typeof b['cp.price_matrix_selection']!=='undefined'&&typeof b['cp.travelersNumber']!=='undefined'){processMainToFirst(b['cp.price_matrix_selection'],b['cp.travelersNumber'],b);wipePreviousCookies();}}catch(error)
+{utag.DB("---Extension: EventStream | Optimizely Events | Saver to Main - ERROR");utag.DB(error);}}}catch(e){utag.DB(e)}},function(a,b){try{if((typeof b['cp.price_matrix_selection']!='undefined'&&b['cp.price_matrix_selection']!=''&&typeof b['saver_upsell_selection_cart']!='undefined'&&b['saver_upsell_selection_cart']!=''&&typeof b['cp.travelersNumber']!='undefined'&&b['cp.travelersNumber']!=''&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){utag.DB("---Extension: EventStream | Optimizely Events | Saver to Main");var setCookie=function(name,value,days){var d=new Date();d.setTime(d.getTime()+24*60*60*1000*days);document.cookie=name+"="+value+";path=/;domain=.alaskaair.com;expires="+d.toGMTString();}
+var deleteCookie=function(name){setCookie(name,'',-1);}
+var wipePreviousCookies=function(){deleteCookie("optimizely_saver_revenue");deleteCookie("optimizely_saver_quantity");utag.DB("---Extension: EventStream | Optimizely Events | Saver to Main: Deleted saver cookies");}
+var processSaverToMain=function(priceMatrixSelection,passengers,udo)
+{var lowestPrice,selection,options,optionPrice,mainPrice;var selections=typeof priceMatrixSelection==="string"?priceMatrixSelection.split(','):(Array.isArray(priceMatrixSelection)?priceMatrixSelection:[]);udo.optimizely_main_revenue=0;udo.optimizely_main_quantity=0;udo.optimizely_main_upsellRevenue=0;udo.optimizely_main_cartUpsell=0;selections.forEach(function(segment,segmentIndex,segments){lowestPrice=Number.MAX_VALUE;selection=segment.split(':')[1];options=segment.split(':')[0].trim().split('|');options.forEach(function(option){optionPrice=parseInt(option.split('-')[1]);if(optionPrice<lowestPrice)lowestPrice=optionPrice;if(option.split('-')[0]=="1"||option.split('-')[0]=="4")
+{mainPrice=optionPrice}});udo.optimizely_main_revenue+=((mainPrice*passengers)*100);udo.optimizely_main_upsellRevenue+=((mainPrice-lowestPrice)*passengers*100);udo.optimizely_main_cartUpsell+=((mainPrice-lowestPrice)*passengers*100);});udo.optimizely_main_quantity=udo['cp.optimizely_saver_quantity'];}
+try{if(b&&typeof b['cp.price_matrix_selection']!=='undefined'&&typeof b['cp.travelersNumber']!=='undefined'){processSaverToMain(b['cp.price_matrix_selection'],b['cp.travelersNumber'],b);wipePreviousCookies();}}catch(error)
+{utag.DB("---Extension: EventStream | Optimizely Events | Saver to Main - ERROR");utag.DB(error);}}}catch(e){utag.DB(e)}},function(a,b){try{if((typeof b['price_matrix_selection']!='undefined'&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){utag.DB("---Extension: EventStream | Optimizely Events | Price Matrix Adaption");var setCookie=function(name,value,days){var d=new Date();d.setTime(d.getTime()+24*60*60*1000*days);document.cookie=name+"="+value+";path=/;domain=.alaskaair.com;expires="+d.toGMTString();}
+var deleteCookie=function(name){setCookie(name,'',-1);}
+var wipePreviousCookies=function(){deleteCookie("optimizely_firstClass_revenue");deleteCookie("optimizely_firstClass_quantity");deleteCookie("optimizely_firstClass_upsellRevenue");deleteCookie("optimizely_firstClass_cartUpsell");deleteCookie("optimizely_main_revenue");deleteCookie("optimizely_main_quantity");deleteCookie("optimizely_main_upsellRevenue");deleteCookie("optimizely_main_cartUpsell");deleteCookie("optimizely_saver_revenue");deleteCookie("optimizely_saver_quantity");utag.DB("---Extension: EventStream | Optimizely Events | Price Matrix Adaption: Deleted previous cookies");}
+var processPriceMatrixSelection=function(priceMatrixSelection,passengers,udo)
+{var lowestPrice,selection,options,selectedProduct,selectedPrice,optionPrice;var numberOfPassengers=parseInt(passengers);var selections=typeof priceMatrixSelection==="string"?priceMatrixSelection.split(','):(Array.isArray(priceMatrixSelection)?priceMatrixSelection:[]);var len=selections.length;udo=udo||{};udo.optimizely_firstClass_revenue=0;udo.optimizely_firstClass_quantity=0;udo.optimizely_firstClass_upsellRevenue=0;udo.optimizely_main_revenue=0;udo.optimizely_main_quantity=0;udo.optimizely_main_upsellRevenue=0;udo.optimizely_saver_revenue=0;udo.optimizely_saver_quantity=0;selections.forEach(function(segment,segmentIndex,segments){lowestPrice=Number.MAX_VALUE;selection=segment.split(':')[1];options=segment.split(':')[0].trim().split('|');options.forEach(function(option){optionPrice=parseInt(option.split('-')[1]);if(optionPrice<lowestPrice)lowestPrice=optionPrice;});selectedProduct=parseInt(selection.split('-')[0]);selectedPrice=parseInt(selection.split('-')[1]);if(selectedProduct===0){udo.optimizely_saver_revenue+=(selectedPrice*numberOfPassengers);udo.optimizely_saver_quantity+=numberOfPassengers;}
+else if(selectedProduct===1||selectedProduct===2||selectedProduct===4){udo.optimizely_main_revenue+=(selectedPrice*numberOfPassengers);udo.optimizely_main_quantity+=numberOfPassengers;udo.optimizely_main_upsellRevenue+=((selectedPrice-lowestPrice)*numberOfPassengers);}
+else if(selectedProduct==3||selectedProduct==6||selectedProduct==7){udo.optimizely_firstClass_revenue+=(selectedPrice*numberOfPassengers);udo.optimizely_firstClass_quantity+=numberOfPassengers;udo.optimizely_firstClass_upsellRevenue+=((selectedPrice-lowestPrice)*numberOfPassengers);}});udo.optimizely_firstClass_revenue*=100;udo.optimizely_firstClass_upsellRevenue*=100;udo.optimizely_main_revenue*=100;udo.optimizely_main_upsellRevenue*=100;udo.optimizely_saver_revenue*=100;return udo;}
+try{if(b&&typeof b.price_matrix_selection!=='undefined'&&typeof b.of_passengers!=='undefined'){processPriceMatrixSelection(b.price_matrix_selection,b.of_passengers,b);wipePreviousCookies();}}catch(error)
+{utag.DB("---Extension: EventStream | Optimizely Events | Price Matrix Adaption - ERROR");utag.DB(error);}}}catch(e){utag.DB(e)}},function(a,b){try{if(1){function setRandomNumber(){var tealium_random_numbers=[];for(j=0;j<10;j++){var rand=Math.round(Math.random()*10).toString();for(i=0;i<15;i++){var random_number=Math.round(Math.random()*10).toString();rand+=random_number;}
+tealium_random_numbers.push(rand);rand="";}
+b['tealium_random_1']=tealium_random_numbers.pop();b['tealium_random_2']=tealium_random_numbers.pop();b['tealium_random_2']=tealium_random_numbers.pop();b['tealium_random_3']=tealium_random_numbers.pop();b['tealium_random_4']=tealium_random_numbers.pop();b['tealium_random_5']=tealium_random_numbers.pop();b['tealium_random_6']=tealium_random_numbers.pop();b['tealium_random_7']=tealium_random_numbers.pop();b['tealium_random_8']=tealium_random_numbers.pop();b['tealium_random_9']=tealium_random_numbers.pop();}
+setRandomNumber();}}catch(e){utag.DB(e)}},function(a,b){try{if((typeof b['products']!='undefined'&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){utag.DB("---Extension: EventStream | Optimizely Events | Product String Conversion");var dissectAdobeProductString=function(products,udo){var event,evar,len;products=typeof products==="string"?products.split(','):(Array.isArray(products)?products:[]);len=products.length;udo=udo||{};udo.optimizely_flight_revenue=0;udo.optimizely_premiumClass_quantity=0;udo.optimizely_premiumClass_revenue=0;products.forEach(function(a,b,c){c[b]=c[b].indexOf(';')!==0?";"+c[b]:c[b]
+c[b]=typeof a==="string"?a.split(';'):[];if(c[b][1]&&(c[b][1].toLowerCase().includes("revenue")||c[b][1].toLowerCase().includes("award")))
+{udo.optimizely_flight_revenue=parseInt(Number(c[b][3]*100));}
+if(c[b][1]&&c[b][1].toLowerCase().includes("premium class")&&!c[b][1].toLowerCase().includes("complimentary"))
+{udo.optimizely_premiumClass_quantity=parseInt(Number(c[b][2]));udo.optimizely_premiumClass_revenue=parseInt(Number(c[b][3]*100));}
+});return udo;};try{if(b&&typeof b.products!=='undefined')dissectAdobeProductString(b.products,b);}catch(error)
+{utag.DB("---Extension: EventStream | Optimizely Events | Product String Conversion - ERROR");utag.DB(error);}}}catch(e){utag.DB(e)}},function(a,b){try{if((typeof b['products']!='undefined'&&typeof b['products']!='undefined'&&b['products']!=''&&b['dom.domain'].toString().toLowerCase().indexOf('mow'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('m.alaskaair.com'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('mobileweb'.toLowerCase())<0)){try{b['products']=b.products.replace(/low_fare_upsell_rev/g,'event32');}catch(e){};try{b['products']=b.products.replace(/chosen_fare_upsell_rev/g,'event33');}catch(e){};try{b['products']=b.products.replace(/main_cabin_upgrade_seats_refund/g,'event67');}catch(e){};try{b['products']=b.products.replace(/main_cabin_upgrade_seats_cancellation/g,'event68');}catch(e){};try{b['products']=b.products.replace(/first_class_complimentary_upgrades/g,'event69');}catch(e){};try{b['products']=b.products.replace(/main_cabin_complimentary_upgrades/g,'event71');}catch(e){};try{b['products']=b.products.replace(/fly_and_buy_offers_presented/g,'event16');}catch(e){}}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['event_name']!='undefined'&&b['ut.event'].toString().indexOf('link')>-1&&b['event_name'].toString().toLowerCase().indexOf('link_click'.toLowerCase())>-1&&typeof b['fare_matrix_selection']!='undefined'&&typeof b['fare_matrix_selection']!='undefined'&&b['fare_matrix_selection']!=''&&b['dom.domain'].toString().toLowerCase().indexOf('mow'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('m.alaskaair.com'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('mobileweb'.toLowerCase())<0)){b['link_text']='Fare Matrix Selection'}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['event_name']!='undefined'&&b['ut.event'].toString().indexOf('link')>-1&&b['event_name'].toString().toLowerCase().indexOf('link_click'.toLowerCase())>-1&&typeof b['link_tracking']!='undefined'&&typeof b['link_tracking']!='undefined'&&b['link_tracking']!=''&&b['dom.domain'].toString().toLowerCase().indexOf('mow'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('mobileweb'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('m.alaskaair.com'.toLowerCase())<0)){b['link_text']=b['link_tracking']}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['shop_upgrades']=='undefined'&&typeof b['search_shop_upgradeable_fares']!='undefined'&&typeof b['search_shop_upgradeable_fares']!='undefined'&&b['search_shop_upgradeable_fares']!=''&&b['dom.domain'].toString().toLowerCase().indexOf('m.alaskaair.com'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('mow'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('mobileweb'.toLowerCase())<0)||(typeof b['shop_upgrades']!='undefined'&&typeof b['shop_upgrades']!='undefined'&&b['shop_upgrades']==''&&typeof b['search_shop_upgradeable_fares']!='undefined'&&typeof b['search_shop_upgradeable_fares']!='undefined'&&b['search_shop_upgradeable_fares']!=''&&b['dom.domain'].toString().toLowerCase().indexOf('m.alaskaair.com'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('mow'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('mobileweb'.toLowerCase())<0)){b['shop_upgrades']=b['search_shop_upgradeable_fares']}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['search_shop_upgradeable_fares']=='undefined'&&typeof b['shop_upgrades']!='undefined'&&typeof b['shop_upgrades']!='undefined'&&b['shop_upgrades']!=''&&b['dom.domain'].toString().toLowerCase().indexOf('mobileweb'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('m.alaskaair.com'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('mow'.toLowerCase())<0)||(typeof b['search_shop_upgradeable_fares']!='undefined'&&typeof b['search_shop_upgradeable_fares']!='undefined'&&b['search_shop_upgradeable_fares']==''&&typeof b['shop_upgrades']!='undefined'&&typeof b['shop_upgrades']!='undefined'&&b['shop_upgrades']!=''&&b['dom.domain'].toString().toLowerCase().indexOf('m.alaskaair.com'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('mobileweb'.toLowerCase())<0&&b['dom.domain'].toString().toLowerCase().indexOf('mow'.toLowerCase())<0)){b['search_shop_upgradeable_fares']=b['shop_upgrades']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){if(b['cp.AS%5FCUST%5FCONTACT%5FID']){var rrtID=b['cp.AS%5FCUST%5FCONTACT%5FID']
+b['rrt_customerID']=rrtID}}}catch(e){utag.DB(e)}},function(a,b,c,d){try{if(1){c=[b['departure_date'],b['return_date']];b['rrt_Aggpara01']=c.join(';')}}catch(e){utag.DB(e);}},function(a,b,c,d){try{if(1){c=[b['origin_city'],b['destination_city']];b['rrt_Aggpara02']=c.join(';')}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_Aggpara03']=b['search_type']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_Aggpara04']=b['trip_duration']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_Aggpara05']=b['membership_level']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_Aggpara06']=b['coupons_discounts']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_Aggpara07']=b['city_pair']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_Aggpara08']=b['departure_date']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_Aggpara09']=b['return_date']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_Aggpara10']=b['origin_city']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_Aggpara11']=b['destination_city']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_Pc']=b['membership_level']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_Pid']=b['city_pair']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_Pprice']=b['coupons_discounts']}}catch(e){utag.DB(e);}},function(a,b,c,d){try{if(1){c=[b['departure_date'],b['return_date']];b['rrt_cart_Aggpara01']=c.join(';')}}catch(e){utag.DB(e);}},function(a,b,c,d){try{if(1){c=[b['origin_city'],b['destination_city']];b['rrt_cart_Aggpara02']=c.join(';')}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_cart_Aggpara03']=b['search_type']}}catch(e){utag.DB(e);}},function(a,b,c,d){try{if(1){c=[b['departure_date'],b['return_date']];b['rrt_cart_Lastpara01']=c.join(';')}}catch(e){utag.DB(e);}},function(a,b,c,d){try{if(1){c=[b['search_type'],b['origin_city'],b['destination_city']];b['rrt_cart_Lastpara02']=c.join(';')}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_purchase_Pid']=b['purchase_id']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_purchase_Pc']=b['payment_methods']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['rrt_purchase_Aggpara01']=b['products']}}catch(e){utag.DB(e);}},function(a,b,c,d){try{if(typeof b['departure_date']!='undefined'||(typeof b['departure_date']!='undefined'&&typeof b['return_date']!='undefined')){c=[b['departure_date'],b['return_date']];b['rrt_purchase_depart_return']=c.join(';')}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['rrt_purchase_depart_return']!='undefined'&&b['consent_tracking_advertising'].toString().indexOf('true')>-1)){document.cookie="rrt_DepartureReturnDate="+b['rrt_purchase_depart_return']+";path=/;domain="+utag.cfg.domain+";expires=";b['cp.rrt_DepartureReturnDate']=b['rrt_purchase_depart_return'];}}catch(e){utag.DB(e);}},function(a,b){try{if(1){if(b['cp.DepartureReturnDate']&&b['cp.DepartureReturnDate']!='undefined'){var rrtOLD=b['cp.DepartureReturnDate'].replace(',',';')
+b['rrt_purchase_date_new']=rrtOLD}}}catch(e){utag.DB(e)}},function(a,b){try{if(1){if(/^GA(\d+\.){3}\d+$/.test(b['cp._ga'])){var a=b['cp._ga'].split('.');b['ga_cid']=a[2]+'.'+a[3];}
+else{b['ga_cid']=b['cp._ga'];}}}catch(e){utag.DB(e)}},function(a,b){try{if((typeof b['adobe_reportsuite']=='undefined'&&b['server'].toString().toLowerCase().indexOf('Q_'.toLowerCase())<0&&b['server'].toString().toLowerCase().indexOf('R_'.toLowerCase())<0&&!/^RD/i.test(b['server'])&&b['server'].toString().toLowerCase().indexOf('prod'.toLowerCase())<0)||b['server']=='STGQ_01'||/^AL_/i.test(b['server'])||b['ut.env'].toString().toLowerCase()=='dev'.toLowerCase()||b['ut.env'].toString().toLowerCase()=='qa'.toLowerCase()){b['adobe_reportsuite']='alaskadev';b['is_staging']='true'}}catch(e){utag.DB(e);}},function(a,b,c,d,e,f,g){if((typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true'&&typeof b['adobe_reportsuite']=='undefined')){d=b['ut.env'];if(typeof d=='undefined')return;c=[{'dev':'alaskadev'},{'qa':'alaskadev'}];var m=false;for(e=0;e<c.length;e++){for(f in utag.loader.GV(c[e])){if(d==f){b['adobe_reportsuite']=c[e][f];m=true};};if(m)break};if(!m)b['adobe_reportsuite']='alaskadev';}},function(a,b){try{if((typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){var adobeOrgID="1056337B54E6D6820A4C98A1";var adobeCookie=(function(org){var cookies=document.cookie.split('; ');for(var i=0;i<cookies.length;i++){if(cookies[i].indexOf('AMCV_'+org)===0){return decodeURI(cookies[i].split('=')[1]).split('|');}}})(adobeOrgID)||undefined;var adobeMCVID=(adobeCookie.indexOf('MCMID')>-1&&adobeCookie[(adobeCookie.indexOf('MCMID')+1)]!=='NONE')?adobeCookie[(adobeCookie.indexOf('MCMID')+1)]:undefined;b["adobe_MCVID"]=adobeMCVID;if(!b["customerid"]&&b["adobe_MCVID"]){b["customerid"]=b["adobe_MCVID"];}
+else if(b["customerid"]&&!b["adobe_MCVID"]){b["adobe_MCVID"]=b["customerid"];}}}catch(e){utag.DB(e)}},function(a,b){try{if(typeof b['adobe_MCVID']=='undefined'){b.adobe_MCVID=undefined;if(adobeIdSessionCookieIsSet(b)===false){utag.DB("**** Delaying Collect (waiting for Adobe Id at session start)");startPollingForCookieBeforeFiringTag(a,b,130);return false;}
+function adobeIdSessionCookieIsSet(b){var adobeOrgID="1056337B54E6D6820A4C98A1";var adobeCookie=(function(org){var cookies=document.cookie.split('; ');for(var i=0;i<cookies.length;i++){if(cookies[i].indexOf('AMCV_'+org)===0){return decodeURI(cookies[i].split('=')[1]).split('|');}}})(adobeOrgID)||undefined;b["adobeMCVID"]=(adobeCookie.indexOf('MCMID')>-1&&adobeCookie[(adobeCookie.indexOf('MCMID')+1)]!=='NONE')?adobeCookie[(adobeCookie.indexOf('MCMID')+1)]:undefined;return typeof b["adobeMCVID"]!=="undefined";}
+function startPollingForCookieBeforeFiringTag(a,b,tagId){utag.DB("**** STARTED POLLING!");var pollingFrequency=300;var maxAttempts=17;var counter=0;var intervalId=window.setInterval(delayCollectUntilAdobeIdReturnsAtSessionStart,pollingFrequency,a,b,tagId);function delayCollectUntilAdobeIdReturnsAtSessionStart(a,b,collectTagId){counter++;var hasAdobeId=adobeIdSessionCookieIsSet(b);if(hasAdobeId||counter>=maxAttempts){if(hasAdobeId){b["customerid"]=b["adobe_MCVID"];}
+else if(!hasAdobeId&&b["customerid"]){b["adobe_MCVID"]=b["customerid"];}
+else b["adobe_MCVID"]=undefined;utag.DB("**** Firing delayed event: "+a+" after "+counter+" attempts\n"+JSON.stringify(b,null,2));utag.track({event:a,data:b,cfg:{cb:null,uids:[collectTagId]}});window.clearInterval(intervalId);}}}}}catch(e){utag.DB(e)}},function(a,b){try{if((typeof b['dom.url']!='undefined'&&b['dom.url'].toString().toLowerCase()=='https://www.alaskaair.com/booking/payment'.toLowerCase())){function processText(inputText){var output=[];var json=inputText.split(' ');json.forEach(function(item){output.push(item.replace(/\'/g,'').split(/(\d+)/).filter(Boolean));});return output;}
+var productSku=processText(b.purchase_id)[0]
+var productCategory="Not Available"
+if(b['cp.cityPair']){productCategory=b['cp.cityPair']}
+else if(b.products.split(':')[2]&&b.products.split(':')[2].split(';')[0]){productCategory=b.products.split(':')[2].split(';')[0]}
+try{b['ga_product_name']=[];b['ga_product_name'].push("Revenue");}catch(e){}
+try{b['ga_product_price']=[];b['ga_product_price'].push((parseFloat(b.products.split(";")[3])/parseInt(b.products.split(";")[2])).toString());}catch(e){}
+try{b['ga_product_quantity']=[];b['ga_product_quantity'].push(b.products.split(";")[2]);}catch(e){}
+try{b['ga_product_category']=[];b['ga_product_category'].push(productCategory);}catch(e){}
+try{b['ga_product_sku']=[];b['ga_product_sku'].push(productSku[0]);}catch(e){}
+if(b.products&&b.products.toString().toLowerCase().indexOf('ANCILLARY_TP'.toLowerCase())>-1){try{b.ga_product_name.push("TP");}catch(e){}
+try{b['ga_product_price'].push(b.products.split(";")[7]);}catch(e){}
+try{b['ga_product_quantity'].push(b.products.split(";")[6]);}catch(e){}
+try{b['ga_product_category'].push(productCategory);}catch(e){}
+try{b['ga_product_sku'].push(productSku[0]);}catch(e){}}
+if(b['products'].toString().toLowerCase().indexOf('ReIssue'.toLowerCase())>-1){try{b['ga_product_name'].push("Reissue");}catch(e){b.error_message+=e}
+try{if(jQuery('#spFareSummaryAmount').text().split('$')[1].split('.')[0]){b['ga_product_price'].push(jQuery('#spFareSummaryAmount').text().split('$')[1].split('.')[0]);}else{b['ga_product_price'].push("0")}}catch(e){b.error_message+=e}
+try{b['ga_product_quantity'].push("1");}catch(e){b.error_message+=e}
+try{b['ga_product_category'].push(productCategory);}catch(e){b.error_message+=e}
+try{b['ga_product_sku'].push(productSku[0]);}catch(e){b.error_message+=e}}}}catch(e){utag.DB(e)}},function(a,b){try{if((typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){function dblSpace(str,chars){chars=chars||"\\s\\s";return str.replace(new RegExp("["+chars+"]+","g")," ");}
+function trim(str,chars){return ltrim(rtrim(str,chars),chars);}
+function ltrim(str,chars){chars=chars||"\\s";return str.replace(new RegExp("^["+chars+"]+","g"),"");}
+function rtrim(str,chars){chars=chars||"\\s";return str.replace(new RegExp("["+chars+"]+$","g"),"");}
+var pluginsObj=window.pluginsObj?window.pluginsObj:{}
+b['has_visitor_API']=(typeof(Visitor)!="undefined"?"VisitorAPI Present":"VisitorAPI Missing");if(b["qp.appvi"]){var new_vi_date=new Date;new_vi_date.setFullYear(new_vi_date.getFullYear()+5);document.cookie='app_vi='+b["qp.appvi"]+';expires='+new_vi_date.toGMTString()+';';b["customerid"]=b["qp.appvi"];}
+else if(b["cp.app_vi"]){b["customerid"]=b["cp.app_vi"];}
+var serverRegex=new RegExp(/^S\d/);if(serverRegex.test(b.server))
+{b["js.adobe_reportsuite"]="alaskadev";}
+var prod=(b["products"]!=null)?b["products"].toLowerCase():'',bundle='';var fRegex=new RegExp(/revenue:/),as50Regex=new RegExp(/as50:/),awardRegex=new RegExp(/award:/),reissueRegex=new RegExp(/reissue:/);if(fRegex.test(prod)||as50Regex.test(prod)||awardRegex.test(prod)||reissueRegex.test(prod))
+{if(bundle=='')
+bundle='F';else
+bundle+='+F';}
+var hRegex=new RegExp(/_hotel:/);if(hRegex.test(prod))
+{if(bundle=='')
+bundle='H';else
+bundle+='+H';}
+var cRegex=new RegExp(/_car:/);if(cRegex.test(prod))
+{if(bundle=='')
+bundle='C';else
+bundle+='+C';}
+b["product_bundles"]=bundle;b["adobe_path_name"]=location.pathname;if(b["adobe_path_name"]=='/'){b["adobe_path_name"]='';}
+if(b["page_name"]!=null&&(b["page_name"].indexOf('page not found')!=-1||b["page_name"].indexOf('PageNotFound')!=-1))
+{b["pagePath"]=b["qp.aspxerrorpath"];}
+else if(b["page_name"]!=null&&b["page_name"].indexOf('page-not-found')!=-1)
+{b["pagePath"]=b["qp.item"];}
+var qp="",qp2="",qp3="";if(!b["campaign"])
+{qp=b["qp.int"]?b["qp.int"]:b["qp.INT"]?b["qp.INT"]:undefined;if(qp){b["campaign"]="INT-_"+qp;}}
+if(!b["campaign"])
+{qp=b["qp.cid"];if(qp){b["campaign"]=qp;}}
+if(!b["campaign"])
+{qp=b["qp.wc_mid"];qp2=b["qp.wc_lid"];if(qp)
+{b["campaign"]=qp+":"+qp2;}}
+if(!b["campaign"])
+{qp=b["qp.semid"];if(qp)
+{var UIDpattern=new RegExp(/.{8}-.{4}-.{4}-.{4}-.{12}/);var SEMpattern=new RegExp(/::.*::.*/);var cookieID=UIDpattern.exec(qp);var elementID=SEMpattern.exec(qp);if(cookieID==null)
+{b["campaign"]="SEM-_"+qp;b["kenshoo_cookie_id"]="No Cookie ID";}
+else
+{b["campaign"]="SEM-_"+elementID;b["kenshoo_cookie_id"]=cookieID;}}}
+if(!b["campaign"])
+{qp=b["qp.s_kwcid"];if(qp){b["campaign"]="SEM-_"+qp;}}
+if(!b["campaign"])
+{qp=b["qp.eml"];qp3=b["qp.elid"];if(qp)
+{b["campaign"]=qp+":"+qp3;}}
+if(!b["campaign"])
+{qp=b["qp.ola"];if(qp)
+{b["campaign"]="OLA-_"+qp;}}
+if(!b["campaign"])
+{qp=b["qp.soc"];if(qp)
+{b["campaign"]="SOC-_"+qp;}}
+if(!b["campaign"])
+{qp=b["qp.meta"];if(qp)
+{b["campaign"]="META-_"+qp;}}
+if(!b["campaign"])
+{qp=b["qp.afl"];if(qp)
+{b["campaign"]="AFL-_"+qp;}}
+if(b["cp.utag_main_campaign"]){b["campaign_traffic"]=b["cp.utag_main_campaign"];}
+if(b["campaign"]&&b["campaign"]!=''){if(b["cp.utag_main_campaign"]&&b["campaign"]===b["cp.utag_main_campaign"]){b["campaign"]='';}
+else if(!b["cp.utag_main_campaign"]||b["cp.utag_main_campaign"]&&b["campaign"]!==b["cp.utag_main_campaign"]){if(b["cp.utag_main_campaign"]){utag.loader.SC("utag_main",{"campaign":""},"d");}
+utag.loader.SC("utag_main",{"campaign":b["campaign"]+";exp-session"});b["campaign_traffic"]=b["campaign"];}}
+var re=new RegExp(/^INT-_/);if(!re.test(b["campaign"])){var re2=new RegExp(/^AS_/);if(!re2.test(b["campaign"])){var re3=new RegExp(/^EB_/);if(!re3.test(b["campaign"])){b["external_mktg_visit"]=b["external_mktg_day"]=b["external_mktg_days"]=b["campaign"];if(b["external_mktg_visit"]!=""){document.cookie="AS_ExtMkt="+b["external_mktg_visit"]+";path=/;domain="+utag.cfg.domain;}}else{b["internal_mktg_visit"]=b["internal_mktg_days"]=b["campaign"];}}else{b["internal_mktg_visit"]=b["internal_mktg_days"]=b["campaign"];}}else{b["internal_mktg_visit"]=b["internal_mktg_days"]=b["campaign"];}
+if(b["kenshoo_cookie_id"]&&b["kenshoo_cookie_id"]!=''){if(b["cp.utag_main_kenshoo_id"]&&b["kenshoo_cookie_id"]===b["cp.utag_main_kenshoo_id"]){b["kenshoo_cookie_id"]='';}
+else if(!b["cp.utag_main_kenshoo_id"]||b["cp.utag_main_kenshoo_id"]&&b["kenshoo_cookie_id"]!==b["cp.utag_main_kenshoo_id"]){if(b["cp.utag_main_kenshoo_id"]){utag.loader.SC("utag_main",{"kenshoo_id":""},"d");}
+utag.loader.SC("utag_main",{"kenshoo_id":b["kenshoo_cookie_id"]+";exp-session"});}}
+if(!b["link_tracking"]&&b["qp.lid"]){b["link_tracking"]=dblSpace(trim(b["qp.lid"]));}
+if(!b['whatcounts_evar_offer_id']){b['whatcounts_evar_offer_id']=b['qp.offid'];}
+if(b['whatcounts_evar_offer_id']&&b['whatcounts_evar_offer_id']!=''){if(b["cp.utag_main_whatcounts_offer_id"]&&b['whatcounts_evar_offer_id']===b["cp.utag_main_whatcounts_offer_id"]){b['whatcounts_evar_offer_id']='';}
+else if(!b["cp.utag_main_whatcounts_offer_id"]||b["cp.utag_main_whatcounts_offer_id"]&&b['whatcounts_evar_offer_id']!==b["cp.utag_main_whatcounts_offer_id"]){if(b["cp.utag_main_whatcounts_offer_id"]){utag.loader.SC("utag_main",{"whatcounts_offer_id":""},"d");}
+utag.loader.SC("utag_main",{"whatcounts_offer_id":b['whatcounts_evar_offer_id']+";exp-session"});}}
+b['whatcounts_visitor_id_49']=b['qp.wc_rid'];if(!b['whatcounts_evar_link_id']){b['whatcounts_evar_link_id']=b['qp.wc_lid'];}
+if(b['whatcounts_evar_link_id']&&b['whatcounts_evar_link_id']!=''){if(b["cp.utag_main_whatcounts_link_id"]&&b['whatcounts_evar_link_id']===b["cp.utag_main_whatcounts_link_id"]){b['whatcounts_evar_link_id']='';}
+else if(!b["cp.utag_main_whatcounts_link_id"]||b["cp.utag_main_whatcounts_link_id"]&&b['whatcounts_evar_link_id']!==b["cp.utag_main_whatcounts_link_id"]){if(b["cp.utag_main_whatcounts_link_id"]){utag.loader.SC('utag_main',{"whatcounts_link_id":""},"d");}
+utag.loader.SC("utag_main",{"whatcounts_link_id":b['whatcounts_evar_link_id']+";exp-session"});}}
+if(b["cp.utag_main__sn"]<2||typeof b["cp.utag_main__sn"]==='undefined'||typeof b["cp.utag_main__sn"]==='null'){b['repeat_visitors']="New";}
+else if(b["cp.utag_main__sn"]>1){b['repeat_visitors']="Repeat";}
+var usesJS_PageName_Override=true;var pnParts,pnPrefix="";page=new Object;page.h1=document.getElementsByTagName("h1")[0];if(typeof page.h1!="undefined")
+page.h1.text=document.getElementsByTagName("h1")[0].textContent;if(usesJS_PageName_Override)
+{if(pnPrefix!="")
+pnParts=3;else
+pnParts=2;if(b['page_name']==""||typeof b['page_name']=="undefined")
+{b['page_name']="";if(pnPrefix!="")
+b['page_name']=pnPrefix+" : ";if(b["campaign"]!=""&&typeof b["campaign"]!="undefined")
+b['page_name']+=b["campaign"]+" : ";if(typeof page.h1!="undefined")
+page.h1.text==""?b['page_name']+=page.h1.innerText:b['page_name']+=page.h1.text;}
+else if(b['page_name'].indexOf(':')!=-1)
+{page.nameArr=b['page_name'].split(':');if(page.nameArr.length==pnParts)
+{if(page.nameArr[(pnParts-1)].indexOf('.')!=-1)
+{if(typeof page.h1!="undefined")
+{page.h1.text==""?page.nameArr[(pnParts-1)]=page.h1.innerText:page.nameArr[(pnParts-1)]=page.h1.text;b['page_name']=page.nameArr.join(" : ");}}}
+else if(page.nameArr.length<pnParts)
+{if(page.nameArr[(page.nameArr.length-1)].indexOf('.')!=-1)
+{if(typeof page.h1!="undefined")
+page.h1.text==""?page.nameArr[(pnParts-1)]=page.h1.innerText:page.nameArr[(pnParts-1)]=page.h1.text;}
+else
+{page.nameArr[(pnParts-1)]=page.nameArr[(page.nameArr.length-1)];}
+if(b["campaign"]!=""&&typeof b["campaign"]!="undefined")
+page.nameArr[(pnParts-2)]=b["campaign"];}
+if(pnPrefix!="")
+page.nameArr[0]=pnPrefix;b['page_name']=page.nameArr.join(" : ");}
+else
+{if(b["campaign"]!=""&&typeof b["campaign"]!="undefined")
+b['page_name']=b["campaign"]+" : "+b['page_name'];if(pnPrefix!="")
+b['page_name']=pnPrefix+" : "+b['page_name'];}}
+b['page_name']=dblSpace(trim(b['page_name'].toLowerCase()));b['entry_page']=b['page_name'];var expire=new Date(),ct=expire.getTime();expire.setTime(ct+31536000000);if(b["membership_level"])
+{document.cookie='AS_mbr='+b["membership_level"]+';expires='+expire.toGMTString()+';';}
+if(b["destination_city"])
+{document.cookie='AS_dest='+b["destination_city"]+';expires='+expire.toGMTString()+';';}
+if(b["of_children"])
+{document.cookie='AS_fam='+b["of_children"]+';expires='+expire.toGMTString()+';';}
+if(b["program_preferences"])
+{if(b["program_preferences"].indexOf('IKAS')!=-1)
+document.cookie='AS_card=IKAS;expires='+expire.toGMTString()+';';if(b["program_preferences"].indexOf('BAAS')!=-1)
+document.cookie='AS_card=BAAS;expires='+expire.toGMTString()+';';}
+if(b["email_subscriptions"])
+{document.cookie='AS_Subscrx='+b["email_subscriptions"]+';expires='+expire.toGMTString()+';';}
+if(b["lounge_membership"])
+{document.cookie='AS_BR='+b["lounge_membership"]+';expires='+expire.toGMTString()+';';}
+var grpA="ForeSee Group A (Control)",grpB="ForeSee Group B (Invited - Accepted)",grpC="ForeSee Group C (Invited - Declined)",grpD="ForeSee Group D (Invited)",grpE="ForeSee Group E (Waiting Next Survey)",fsr_c=b["cp.fsr.s"],fsr_d=(fsr_c&&window.JSON)?JSON.parse(fsr_c):undefined;if(fsr_d&&fsr_d.v){if(fsr_d.v===1){if(fsr_d.i){switch(fsr_d.i){case-1:if(b["forsee_group"]!==grpC){b["forsee_group"]=grpC;}
+break;case 0:if(b["forsee_group"]!==grpD){b["forsee_group"]=grpD;}
+break;case 1:if(b["forsee_group"]!==grpB){b["forsee_group"]=grpB;}
+break;}}
+else if(b["forsee_group"]!==grpD){b["forsee_group"]=grpD;}}
+else if(fsr_d.v===-1&&b["forsee_group"]!==grpE){b["forsee_group"]=grpE;}
+else if(fsr_d.v===-2&&b["forsee_group"]!==grpA){b["forsee_group"]=grpA;}}
+var activityMap=JSON.parse(sessionStorage.getItem("activityMap"))||{};utag.DB("### Is activityMap defined??"+activityMap);if(Object.keys(activityMap).length||(typeof b.activityMap!=="undefined"&&Object.keys(b.activityMap).length)){utag.DB("### Is activityMap varibles running??"+activityMap);b.activityMap=b.activityMap||{};b.activitymapPage=b.activitymapLink=b.activitymapRegion=b.activitymapPageIDType="";b.activitymapPage=b.adobePageName?b.adobePageName:"";b.activitymapLink=!utag.ut.isEmpty(activityMap.link)?activityMap.link.trim():(!utag.ut.isEmpty(b.activityMap.link)?b.activityMap.link:"");b.activitymapRegion=!utag.ut.isEmpty(activityMap.region)?activityMap.region.trim():(!utag.ut.isEmpty(b.activityMap.region)?b.activityMap.region:"");b.activitymapPageIDType=!utag.ut.isEmpty(b.activityMap.pageIDType)?b.activityMap.pageIDType:1;utag.DB("### Re-set activityMap Object in sessionStorage!");sessionStorage.setItem("activityMap",JSON.stringify({}));}}}catch(e){utag.DB(e)}},function(a,b){try{if(typeof b['link_type']=='undefined'){let event_list=["event102","event139","event140","event141","event142","event144","event145"];let events_arr=[b.events];if(event_list.some(v=>events_arr.includes(v))){b.link_type="o";b.page_name="";}}}catch(e){utag.DB(e)}},function(a,b){try{if(b['dom.url'].toString().toLowerCase()=='https://www.alaskaair.com/booking/payment'.toLowerCase()){try{b['revenues']=b.products.split(";")[3]}catch(e){}}}catch(e){utag.DB(e);}},function(a,b){try{if(1){b['dom_pathname']=b['dom.pathname'];b['dom_url']=b['dom.url'];b['dom_referrer']=b['dom.referrer'];b['dom_domain']=b['dom.domain'];b['dom_title']=b['dom.title'];b['utm_source_udo']=b['qp.utm_source'];b['utm_medium_udo']=b['qp.utm_medium'];b['utm_content_udo']=b['qp.utm_content'];b['utm_term_udo']=b['qp.utm_term'];b['utm_campaign_udo']=b['qp.utm_campaign'];b['gclid_udo']=b['qp.gclid'];b['gclsrc_udo']=b['qp.gclsrc']}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['link_text']!='undefined'&&b['link_text']!=''&&typeof b['link_type']=='undefined'&&b['ut.event'].toString().toLowerCase().indexOf('view'.toLowerCase())<0)){b['link_type']='o';b['link_name']=b['link_text']}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['link_tracking']!='undefined'&&b['link_tracking']!=''&&typeof b['link_type']=='undefined'&&b['ut.event'].toString().toLowerCase().indexOf('view'.toLowerCase())<0)){b['link_type']='o';b['link_name']=b['link_tracking']}}catch(e){utag.DB(e);}},function(a,b){try{if(1){if(window.optimizely&&typeof window.optimizely.get==='function'&&window.optimizely.get("custom/tealiumIntegrator")){window.optimizely.get("custom/tealiumIntegrator").assignCampaigns(b);}}}catch(e){utag.DB(e)}},function(a,b){try{if((parseFloat(b['optimizely_saver_quantity'])>parseFloat(0)&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){document.cookie="optimizely_saver_quantity="+b['optimizely_saver_quantity']+";path=/;domain="+utag.cfg.domain+";expires=";b['cp.optimizely_saver_quantity']=b['optimizely_saver_quantity'];}}catch(e){utag.DB(e);}},function(a,b){try{if((parseFloat(b['optimizely_saver_revenue'])>parseFloat(0)&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){document.cookie="optimizely_saver_revenue="+b['optimizely_saver_revenue']+";path=/;domain="+utag.cfg.domain+";expires=";b['cp.optimizely_saver_revenue']=b['optimizely_saver_revenue'];}}catch(e){utag.DB(e);}},function(a,b){try{if((parseFloat(b['optimizely_main_upsellRevenue'])>parseFloat(0)&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){document.cookie="optimizely_main_upsellRevenue="+b['optimizely_main_upsellRevenue']+";path=/;domain="+utag.cfg.domain+";expires=";b['cp.optimizely_main_upsellRevenue']=b['optimizely_main_upsellRevenue'];}}catch(e){utag.DB(e);}},function(a,b){try{if((parseFloat(b['optimizely_main_quantity'])>parseFloat(0)&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){document.cookie="optimizely_main_quantity="+b['optimizely_main_quantity']+";path=/;domain="+utag.cfg.domain+";expires=";b['cp.optimizely_main_quantity']=b['optimizely_main_quantity'];}}catch(e){utag.DB(e);}},function(a,b){try{if((parseFloat(b['optimizely_firstClass_revenue'])>parseFloat(0)&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){document.cookie="optimizely_firstClass_revenue="+b['optimizely_firstClass_revenue']+";path=/;domain="+utag.cfg.domain+";expires=";b['cp.optimizely_firstClass_revenue']=b['optimizely_firstClass_revenue'];}}catch(e){utag.DB(e);}},function(a,b){try{if((parseFloat(b['optimizely_firstClass_upsellRevenue'])>parseFloat(0)&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){document.cookie="optimizely_firstClass_upsellRevenue="+b['optimizely_firstClass_upsellRevenue']+";path=/;domain="+utag.cfg.domain+";expires=";b['cp.optimizely_firstClass_upsellRevenue']=b['optimizely_firstClass_upsellRevenue'];}}catch(e){utag.DB(e);}},function(a,b){try{if((parseFloat(b['optimizely_main_revenue'])>parseFloat(0)&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){document.cookie="optimizely_main_revenue="+b['optimizely_main_revenue']+";path=/;domain="+utag.cfg.domain+";expires=";b['cp.optimizely_main_revenue']=b['optimizely_main_revenue'];}}catch(e){utag.DB(e);}},function(a,b){try{if((parseFloat(b['optimizely_firstClass_quantity'])>parseFloat(0)&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){document.cookie="optimizely_firstClass_quantity="+b['optimizely_firstClass_quantity']+";path=/;domain="+utag.cfg.domain+";expires=";b['cp.optimizely_firstClass_quantity']=b['optimizely_firstClass_quantity'];}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['price_matrix_selection']!='undefined'&&b['price_matrix_selection']!=''&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){document.cookie="price_matrix_selection="+b['price_matrix_selection']+";path=/;domain="+utag.cfg.domain+";expires=";b['cp.price_matrix_selection']=b['price_matrix_selection'];}}catch(e){utag.DB(e);}},function(a,b){try{if((parseFloat(b['optimizely_firstClass_cartUpsell'])>parseFloat(0)&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){document.cookie="optimizely_firstClass_cartUpsell="+b['optimizely_firstClass_cartUpsell']+";path=/;domain="+utag.cfg.domain+";expires=";b['cp.optimizely_firstClass_cartUpsell']=b['optimizely_firstClass_cartUpsell'];}}catch(e){utag.DB(e);}},function(a,b){try{if((parseFloat(b['optimizely_main_cartUpsell'])>parseFloat(0)&&typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true')){document.cookie="optimizely_main_cartUpsell="+b['optimizely_main_cartUpsell']+";path=/;domain="+utag.cfg.domain+";expires=";b['cp.optimizely_main_cartUpsell']=b['optimizely_main_cartUpsell'];}}catch(e){utag.DB(e);}},function(a,b){try{if(1){const keys=Object.keys(b);const keysLen=keys.length;const hash={};for(let i=0;i<keysLen;i++){const key=keys[i];let value=b[key];if(!hash[value]&&typeof value==="string"){const hashKey=value;value=value.replace(/(%7C|%257C)/gi,"|");hash[hashKey]=value;}
+b[key]=value;}}}catch(e){utag.DB(e)}},function(a,b){try{if((typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('shopping:cart'.toLowerCase())>-1)||(typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('shopping: flight summary'.toLowerCase())>-1)){b['fb_event']='vc';try{b['content_type']=['flight','product']}catch(e){}}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('booking:reservation'.toLowerCase())>-1&&typeof b['purchase_id']!='undefined'&&b['purchase_id']!='')||(typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('booking: payment confirmation'.toLowerCase())>-1&&typeof b['purchase_id']!='undefined'&&b['purchase_id']!='')){try{b['content_type']=['flight','product']}catch(e){};b['fb_event']='purch'}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase()=='MyAS:Mileage Plan &ndash; Overview and elite status'.toLowerCase()&&b['events'].toString().toLowerCase().indexOf('event2:'.toLowerCase())>-1)||(typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase()=='myas : mileage plan – overview and elite status'.toLowerCase()&&b['events'].toString().toLowerCase().indexOf('event2:'.toLowerCase())>-1)||(typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase()=='Join Mileage Plan Confirmation'.toLowerCase()&&b['events'].toString().toLowerCase().indexOf('event1:'.toLowerCase())>-1)){b['fb_event']='CompleteRegistration';try{b['content_type']=['flight','product']}catch(e){}}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('booking:payment'.toLowerCase())>-1)||(typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('booking: payment info'.toLowerCase())>-1)){b['fb_event']='cout';try{b['content_type']=['flight','product']}catch(e){}}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('Shopping:MatrixAvailability'.toLowerCase())>-1)||(typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('shopping:calendaravailability'.toLowerCase())>-1)||(typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('Shopping:BundledAvailability'.toLowerCase())>-1)||(typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('shopping: flight search results'.toLowerCase())>-1)||(typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('shopping: calendar'.toLowerCase())>-1)||(typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('Shopping:FlightResultsMicrosite'.toLowerCase())>-1)){b['fb_event']='search';try{b['content_type']=['flight','product']}catch(e){}}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['fb_event']!='undefined'&&b['fb_event'].toString().toLowerCase()=='search'.toLowerCase())||(typeof b['fb_event']!='undefined'&&b['fb_event'].toString().toLowerCase()=='vc'.toLowerCase())||(typeof b['fb_event']!='undefined'&&b['fb_event'].toString().toLowerCase()=='cout'.toLowerCase())||(typeof b['fb_event']!='undefined'&&b['fb_event'].toString().toLowerCase()=='purch'.toLowerCase())||(typeof b['fb_event']!='undefined'&&b['fb_event'].toString().toLowerCase()=='addtocart'.toLowerCase())){b['content_ids']=b['city_pair']}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('booking:reservation'.toLowerCase())>-1)||(typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('booking: payment confirmation'.toLowerCase())>-1)){b['value']=b['productStringSubtotal']}}catch(e){utag.DB(e);}},function(a,b){try{if(b['of_children'].toString().toLowerCase()=='zero'.toLowerCase()){b['of_children']='0'}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['of_adults']!='undefined'&&b['of_adults'].toString().toLowerCase()=='zero'.toLowerCase())){b['of_adults']='0'}}catch(e){utag.DB(e);}},function(a,b){try{if((typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true'&&b['ut.profile'].toString().toLowerCase()!='mobileweb'.toLowerCase())||(typeof b['loadrule_id4']!='undefined'&&b['loadrule_id4']=='true'&&b['ut.profile'].toString().toLowerCase()=='mobileweb'.toLowerCase()&&b['ut.env'].toString().toLowerCase()!='prod'.toLowerCase())){var main_profile="main";var mobileweb_profile="mobileweb";var adobeEventMappingObj={"purchase":{[main_profile]:"purchase",[mobileweb_profile]:"purchase"},"credit_card_referral":{[main_profile]:"event23",[mobileweb_profile]:"event76"},"premium_class_seats_available":{[main_profile]:"event65",[mobileweb_profile]:"event73"},"saver_class_seats_available":{[main_profile]:"event107",[mobileweb_profile]:"event107"},"main_class_seats_available":{[main_profile]:"event108",[mobileweb_profile]:"event108"}}
+var profile=b["ut.profile"]
+var pushEvent=function(event_name){if(!event_name){window.utag.DB("Events and Products - Adobe EventStream Conversion | pushEvent function | wasn't passed an event name");return;}
+var eventObj=adobeEventMappingObj[event_name]
+if(typeof eventObj!=='undefined'&&typeof eventObj[profile]!=='undefined'){b["adobe_events"].push(eventObj[profile])}else{window.utag.DB(`Events and Products-Adobe EventStream Conversion|pushEvent function|wasn't able to find an event object or profile event value that corresponds to: ${event_name}`);
+    }
+} 
+
+if (b["events"]) {
+	b["adobe_events"] = b["events"].split(",");
+}
+
+else {
+	b["adobe_events"] = [];
+}
+
+if (b["event_name"]) {
+	var events_tmp = b["event_name"].split(",");
+	b["adobe_events"].push.apply(b["adobe_events"],events_tmp);
+}
+
+if (b["link_tracking"]) {
+	if (b["link_tracking"].indexOf("lounge billing") !== -1 ||
+		b["link_tracking"].indexOf("creditcard") !== -1 ||
+		b["link_tracking"].indexOf("applynow") !== -1) {
+			pushEvent("credit_card_referral")
+	}
+}
+
+if (b["apply_now_click"]) {
+	if (b["apply_now_click"].indexOf("event23") !== -1) {
+        pushEvent("credit_card_referral")
+	}
+}
+
+if (b["seatmap_has_pc_seats"]) {
+	if (b["seatmap_has_pc_seats"] == 1) {
+        pushEvent("premium_class_seats_available")
+	}
+}
+
+if (b["seatmap_has_main_seats"]) {
+	if (b["seatmap_has_main_seats"] == 1) {
+        pushEvent("main_class_seats_available")
+	}
+}
+
+if (b["seatmap_has_saver_seats"]) {
+	if (b["seatmap_has_saver_seats"] == 1) {
+        pushEvent("saver_class_seats_available")
+	}
+}
+
+// Fire purchase event anytime purchase_id UDO var is present
+if (b["purchase_id"]) {
+    
+    if (b.adobe_events.indexOf("purchase") < 0) {
+        pushEvent("purchase");
+    }
+ 
+}
+
+/***********
+  PRODUCTS
+************/
+
+// Dissecting s.products string to build individual variables for EventStream Connector mapping
+var dissectAdobeProductString = function(products, udo) {
+    var event, evar, len;
+    products = typeof products === "string" ? products.split(',') : (Array.isArray(products) ? products : []);
+    len = products.length;
+    udo = udo || {};
+    udo.product_category = [];
+    udo.product_id = [];
+    udo.product_quantity = [];
+    udo.product_price = [];
+    udo.product_events = [];
+    udo.product_evars = [];
+    products.forEach(function(a, b, c) {
+        c[b] = c[b].indexOf(';') !== 0 ? ";" + c[b] : c[b]
+        c[b] = typeof a === "string" ? a.split(';') : [];
+        for (var i = 0; i < 6; i++) {
+            if (i === 0) {
+                if (c[b][i] && c[b][i] !== "") {
+                    udo.product_category.push(c[b][i]);
+                } else {
+                    udo.product_category.push("");
+                }
+            }
+            if (i === 1) {
+                if (c[b][i] && c[b][i] !== "") {
+                    udo.product_id.push(c[b][i]);
+                } else {
+                    udo.product_id.push("");
+                }
+            }
+            if (i === 2) {
+                if (c[b][i] && c[b][i] !== "") {
+                    udo.product_quantity.push(Number(c[b][i]));
+                } else {
+                    udo.product_quantity.push(0);
+                }
+            }
+            if (i === 3) {
+                if (c[b][i] && c[b][i] !== "") {
+                    udo.product_price.push(Number(c[b][i]));
+                } else {
+                    udo.product_price.push(0);
+                }
+            }
+            if (i === 4) {
+                if (c[b][i] && c[b][i] !== "") {
+                    udo.product_events.push(c[b][i]);
+                } else {
+                    udo.product_events.push("");
+                }
+            }
+            if (i === 5) {
+                if (c[b][i] && c[b][i] !== "") {
+                    udo.product_evars.push(c[b][i]);
+                } else {
+                    udo.product_evars.push("");
+                }
+            }
+        }
+    });
+    // unique product value events
+    udo.unique_value_events = {};
+    var events_arr = udo.product_events.join('|').split('|');
+    events_arr.forEach(function(elem) {
+        if (elem.split('=')[0] !== "")
+            udo.unique_value_events[elem.split('=')[0]] = 1;
+    });
+    // create array for each unique value event
+    for (event in udo.unique_value_events) {
+        if (event) {
+            udo["product_value_" + event] = [];
+            // populate value event array with corresponding values from product_events array
+            udo.product_events.forEach(function(e, i) {
+                if (e.indexOf(event) > -1) {
+                    var value = b.product_events[i].split(event + "=")[1].split('|')[0];
+                    udo["product_value_" + event].push(value);
+                } else {
+                    udo["product_value_" + event].push("");
+                }
+            });
+        }
+    }
+    // unique merchandising eVars
+    b.unique_merch_evars = {};
+    var evars_arr = b.product_evars.join('|').split('|');
+    evars_arr.forEach(function(elem) {
+        if (elem.split('=')[0] !== "")
+            b.unique_merch_evars[elem.split('=')[0]] = 1;
+    });
+    // create array for each unique merchandising eVar
+    for (evar in udo.unique_merch_evars) {
+        if (evar) {
+            udo["product_merch_" + evar] = [];
+            // populate value event array with corresponding values from product_events array
+            udo.product_evars.forEach(function(e, i) {
+                if (e.indexOf(evar) > -1) {
+                    var value = b.product_evars[i].split(evar + "=")[1].split('|')[0];
+                    udo["product_merch_" + evar].push(value);
+                } else {
+                    udo["product_merch_" + evar].push("");
+                }
+            });
+        }
+    }
+    try {
+        // remove temp vars
+        delete udo.product_evars;
+        delete udo.product_events;
+        delete udo.unique_merch_evars;
+        delete udo.unique_value_events;
+    } catch (e) {
+        console.log(e);
+    }
+    return udo;
+};
+// add products string individual products arrays to b-Object
+if (b && typeof b.products !== 'undefined') dissectAdobeProductString(b.products, b);
+} } catch(e){ utag.DB(e) }  },
+function(a,b){ try{ if((typeof b['loadrule_id70']!='undefined'&&b['loadrule_id70']=='true'&&b['ut.profile'].toString().toLowerCase()!='mobileweb'.toLowerCase())||(typeof b['loadrule_id4']!='undefined'&&b['loadrule_id4']=='true'&&b['ut.profile'].toString().toLowerCase()=='mobileweb'.toLowerCase()&&b['ut.env'].toString().toLowerCase()!='prod'.toLowerCase())){
+/**************
+  ALL EVENTS
+***************/
+
+// Page Load Time
+var pageload = (function(w) {
+    var a = w.performance || w.webkitPerformance || w.msPerformance || w.mozPerformance;
+    if (a && "undefined" != typeof a) {
+        var b = w.performance.timing.navigationStart,
+            c = new Date(),
+            d = c.getTime(),
+            e = Math.round((d - b) / 100);
+        return e;
+    }
+})(window);
+if (pageload) b.page_load_time = pageload;
+
+// Screen Resolution
+b.screen_resolution = window.screen.width + "x" + window.screen.height;
+
+// Screen Color Depth
+b.screen_color_depth = window.screen.colorDepth;
+
+// Browser Width
+b.browser_width = b['dom.viewport_width'] || "";
+
+// Browser Height
+b.browser_height = b['dom.viewport_height'] || "";
+
+// Browser Language && Language Preferences
+if (typeof navigator !== "undefined") {
+    if (typeof navigator.languages !== "undefined") {
+        b.browser_language_preferences = navigator.languages.join(',');
+    }
+    if (typeof navigator.language !== "undefined") {
+        b.browser_language = navigator.language;
+    }
+}
+
+// Cookies Enabled
+b.browser_cookies_enabled = navigator && navigator.cookieEnabled ? "Y" : "N";
+
+// Java Enabled
+b.browser_java_enabled = navigator && navigator.javaEnabled() ? "Y" : "N";
+} } catch(e){ utag.DB(e) }  },
+function(a,b){ try{ if((typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('Shopping'.toLowerCase())>-1&&b['page_name'].toString().toLowerCase().indexOf('cart'.toLowerCase())>-1)||(typeof b['page_name']!='undefined'&&b['page_name'].toString().toLowerCase().indexOf('shopping'.toLowerCase())>-1&&b['page_name'].toString().toLowerCase().indexOf('flight summary'.toLowerCase())>-1)){b['fb_event2']='addtocart';try{b['content_type']=['flight', 'product']}catch(e){};try{b['value']=[b.productStringSubtotal.toString()];}catch(e){}} } catch(e){ utag.DB(e); }  },
+function(a,b){ try{ if(1){
+var getCookieValue = function (a) {
+  var matchResults = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)');
+  return matchResults ? matchResults.pop() : '';
+};
+
+b.optimizely_id = getCookieValue("optimizelyEndUserId");
+} } catch(e){ utag.DB(e) }  }];
+
+  
+  u.send = function(a,b) {
+    var c, d, i;
+    if(u.ev[a] || typeof u.ev["all"] !== "undefined"){
+      //Don't fire for tag bridge event"remote_api"
+if(a==="remote_api"){utag.DB("Remote API event suppressed.");return;}
+if(u.iab_v20_compliance===true||u.iab_v20_compliance==="true"){if(typeof __tcfapi==="function"){__tcfapi("getTCData",2,function(tcData,success){if(success){u.tc_string+="gdpr=";if(tcData.gdprApplies===true){u.tc_string+="1";}else if(tcData.gdprApplies===false){u.tc_string+="0";}else{u.tc_string+=String(tcData.gdprApplies);}
+u.tc_string+="&gdpr_consent="+tcData.tcString;execute_send();}});}else{var frame=window;var cmpFrame;var cmpCallbacks={};while(frame){try{if(frame.frames["__tcfapiLocator"]){cmpFrame=frame;break;}}catch(error){utag.DB(error);}
+if(frame===window.top){break;}
+frame=frame.parent;}
+if(!cmpFrame){execute_send();}else{window.__tcfapi=function(cmd,version,callback,arg){var callId=String(Math.random());var msg={__tcfapiCall:{command:cmd,parameter:arg,version:version,callId:callId}};cmpCallbacks[callId]=callback;cmpFrame.postMessage(msg,"*");};window.tealiumiabPostMessageHandler=function(event){var json={};try{json=typeof event.data==="string"?JSON.parse(event.data):event.data;}catch(error){utag.DB(error);}
+var payload=json.__tcfapiReturn;if(payload){if(typeof cmpCallbacks[payload.callId]==="function"){cmpCallbacks[payload.callId](payload.returnValue,payload.success);cmpCallbacks[payload.callId]=null;}}};window.addEventListener("message",tealiumiabPostMessageHandler,false);__tcfapi("getTCData",2,function(tcData,success){if(success){u.tc_string+="gdpr=";if(tcData.gdprApplies===true){u.tc_string+="1";}else if(tcData.gdprApplies===false){u.tc_string+="0";}else{u.tc_string+=String(tcData.gdprApplies);}
+u.tc_string+="&gdpr_consent="+tcData.tcString;execute_send();}});}}}else{execute_send();}
+function execute_send(){if(u.data_source){b.tealium_datasource=u.data_source;}
+u.make_enrichment_request=false;for(c=0;c<u.extend.length;c++){try{d=u.extend[c](a,b);if(d==false)return}catch(e){}};if(!u.is_in_sample_group(b)){return false;}
+u.get_performance_timing(b);for(i=0;i<u.server_list.length;i++){if(u.server_list[i].toLowerCase().indexOf("http")===-1){u.server_list[i]=u.validateProtocol(u.server_list[i],true);}
+if(u.enrichment_enabled[i]!==false){u.enrichment_enabled[u.server_list[i]]=true;}}
+if(u.server_list.length>1){u.profile_specific_vid=1;}
+u.data=utag.datacloud||{};u.data["loader.cfg"]={};for(d in utag.loader.GV(utag.loader.cfg)){if(utag.loader.cfg[d].load&&utag.loader.cfg[d].send){utag.loader.cfg[d].executed=1;}else{utag.loader.cfg[d].executed=0;}
+u.data["loader.cfg"][d]=utag.loader.GV(utag.loader.cfg[d]);}
+u.data.data=b;for(d in u.data.data){if((d+'').indexOf("qp.")===0){u.data.data[d]=encodeURIComponent(u.data.data[d]);}else if((d+'').indexOf("va.")===0){delete u.data.data[d];}}
+if(!b["cp.utag_main_dc_event"]){b["cp.utag_main_dc_visit"]=(1+(b["cp.utag_main_dc_visit"]?parseInt(b["cp.utag_main_dc_visit"]):0))+"";}
+b["cp.utag_main_dc_event"]=(1+(b["cp.utag_main_dc_event"]?parseInt(b["cp.utag_main_dc_event"]):0))+"";utag.loader.SC("utag_main",{"dc_visit":b["cp.utag_main_dc_visit"],"dc_event":b["cp.utag_main_dc_event"]+";exp-session"});utag.data["cp.utag_main_dc_visit"]=b["cp.utag_main_dc_visit"];utag.data["cp.utag_main_dc_event"]=b["cp.utag_main_dc_event"];var dt=new Date();u.data.browser={};try{u.data.browser["height"]=window.innerHeight||document.body.clientHeight;u.data.browser["width"]=window.innerWidth||document.body.clientWidth;u.data.browser["screen_height"]=screen.height;u.data.browser["screen_width"]=screen.width;u.data.browser["timezone_offset"]=dt.getTimezoneOffset();}catch(e){utag.DB(e);}
+u.data["event"]=a+'';u.data["post_time"]=dt.getTime();if(u.data_enrichment==="frequent"||u.data_enrichment==="infrequent"){u.visit_num=b["cp.utag_main_dc_visit"];if(parseInt(u.visit_num)>1&&b["cp.utag_main_dc_event"]==="1"){u.enrichment_polling=2;}
+try{u.va_update=parseInt(localStorage.getItem("tealium_va_update")||0);}catch(e){utag.DB(e);}
+u.visitor_id=u.visitor_id||b.tealium_visitor_id||b["cp.utag_main_v_id"];if(u.data_enrichment==="frequent"||(u.data_enrichment==="infrequent"&&parseInt(u.visit_num)>1&&parseInt(b["cp.utag_main_dc_event"])<=5&&u.visit_num!==u.va_update)){u.make_enrichment_request=true;}
+u.visitor_service_request=function(t,server){var s,p=u.get_account_profile(server);if(u.visitor_service_override){s=u.validateProtocol(u.visitor_service_override,true);}else{s=u.validateProtocol(u.server_prefix,true)+"visitor-service"+(u.region?"-"+u.region:"").replace(/[^-A-Za-z0-9+_.]/g,"")+"."+u.server_domain;}
+(function(p){var prefix="tealium_va";var key="_"+p[1]+"_"+p[2];utag.ut["writeva"+p[2]]=function(o){utag.DB("Visitor Attributes: "+prefix+key);utag.DB(o);var str=JSON.stringify(o);if(str!=="{}"&&str!==""){try{localStorage.setItem("tealium_va_update",utag.data["cp.utag_main_dc_visit"]);localStorage.setItem(prefix,str);localStorage.setItem(prefix+key,str);}catch(e){utag.DB(e);}
+if(typeof tealium_enrichment==="function"){tealium_enrichment(o,prefix+key);}}};}(p.slice(0)));var vid=u.visitor_id;if(u.profile_specific_vid===1){vid+=p[2];}
+utag.ut.loader({id:"tealium_visitor_service_343"+p[2]+"_"+u.request_increment++,src:s+"/"+p[1]+"/"+p[2]+"/"+vid.replace(/\?callback=.*/g,"")+"?callback=utag.ut%5B%22writeva"+p[2]+"%22%5D&rnd="+t});};u.do_enrichment=function(server,enrichment_polling,enrichment_polling_delay){if(typeof utag.ut.loader!="undefined"){for(i=0;i<enrichment_polling;i++){setTimeout(function(){u.visitor_service_request((new Date).getTime(),server);},i*enrichment_polling_delay+1);}}};}
+var json_string,regExpReplace=new RegExp(u.visitor_id,"g");if(b.tealium_random&&typeof utag.globals[b.tealium_random]==="object"){for(var downstream_param in utag.globals[b.tealium_random]){u.data.data[downstream_param]=u.deepCopy(utag.globals[b.tealium_random][downstream_param]);}}
+if(window.FormData){function postData(server_index,enrichment_polling,enrichment_polling_delay){if(server_index+1>u.server_list.length){return;}
+var xhr=new XMLHttpRequest();var server=u.validateProtocol(u.server_list[server_index],true);var formData=new FormData();xhr.addEventListener("readystatechange",function(){if(xhr.readyState===3){try{u.region=xhr.getResponseHeader("X-Region")||u.region||"";}catch(res_error){utag.DB(res_error);u.region=u.region||"";}
+if(u.region)utag.loader.SC("utag_main",{"dc_region":u.region+";exp-session"});utag.DB("dc_region:"+u.region);}else if(xhr.readyState===4){postData(server_index+1,enrichment_polling,enrichment_polling_delay);if(u.make_enrichment_request&&u.enrichment_enabled[server]){u.do_enrichment(server,enrichment_polling,enrichment_polling_delay);}}});if(u.server_list[server_index].toLowerCase().indexOf("http")!==0){u.server_list[server_index]=u.validateProtocol(u.server_list[server_index],true);}
+u.server_list[server_index]=infixParameters(u.server_list[server_index],u.tc_string);xhr.open("post",u.server_list[server_index],true);xhr.withCredentials=true;json_string=JSON.stringify(u.data);if(u.profile_specific_vid===1&&u.visitor_id){json_string=json_string.replace(regExpReplace,u.visitor_id+u.get_account_profile(server)[2]);}
+formData.append("data",json_string);xhr.send(formData);}
+postData(0,u.enrichment_polling,u.enrichment_polling_delay);}else{for(i=0;i<u.server_list.length;i++){(function(i,enrichment_polling,enrichment_polling_delay){var server=u.server_list[i];setTimeout(function(){json_string=JSON.stringify(u.data);if(u.profile_specific_vid==1&&u.visitor_id){json_string=json_string.replace(regExpReplace,u.visitor_id+u.get_account_profile(server)[2]);}
+var img=new Image();img.src=server+"?"+(u.tc_string?u.tc_string+"&":"")+"data="+encodeURIComponent(json_string);if(u.make_enrichment_request&&u.enrichment_enabled[server]){u.do_enrichment(server,enrichment_polling,enrichment_polling_delay);}},i*700);}(i,u.enrichment_polling,u.enrichment_polling_delay));}}}}};try{utag.o[loader].loader.LOAD(id);}catch(e){utag.loader.LOAD(id);}})("343","alaska.main");}catch(e){utag.DB(e);}
