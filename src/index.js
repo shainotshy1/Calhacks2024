@@ -200,6 +200,13 @@ async function getGroqChatCompletion(content) {
     model: "llama3-8b-8192",
   })
 }
+
+// var connection = indexedDB.open("audioDB", 1);
+// connection.onsuccess = (e) => {
+//   var db = e.target.result;
+//   var objectStore = db.createObjectStore("audioDB", {});
+// };
+
   
 document.addEventListener('DOMContentLoaded', function() {
   const recordButton = document.getElementById('record-icon');
@@ -239,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         // Handle stopping the recording
-        mediaRecorder.onstop = () => {
+        mediaRecorder.onstop = async function() {
           console.log('Recording stopped');
 
           // Create a Blob from audio chunks
@@ -250,10 +257,37 @@ document.addEventListener('DOMContentLoaded', function() {
           audioPlayer.src = audioUrl; // Set the audio player source
 
           // Create an anchor element to trigger download
-          const downloadLink = document.createElement('a');
-          downloadLink.href = audioUrl;
-          downloadLink.download = 'recording.webm';
-          downloadLink.click(); // Trigger the download automatically
+          // const downloadLink = document.createElement('a');
+          // downloadLink.href = audioUrl;
+          // downloadLink.download = 'recording.webm';
+          // downloadLink.click(); // Trigger the download automatically
+
+          // var connection = indexedDB.open("audioDB", 1);
+          // connection.onsuccess = (e) => {
+          //   var db = e.target.result;
+          //   var transaction = db.transaction(["audioDB"], "readwrite");
+          //   var store = transaction.objectStore("audioDB");
+          //   var request = store.add(audioBlob, "audio");
+          //   request.onsuccess = (e) => {
+          //     console.log("Audio added to database");
+          //   };
+          //   request.onerror = (e) => {
+          //     console.error("Error adding audio to database");
+          //   };
+          // };
+          
+          let s = await audioToText(audioBlob);
+          addToChat(s, true);
+          messageGroq(s);
+
+          // s = s.then((value) => {
+          //   addToChat(s, true);
+          //   messageGroq(s);
+          // });
+            
+          // addToChat(s, true);
+          // messageGroq(s);
+
 
           // Clear audio chunks
           audioChunks = [];
