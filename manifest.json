@@ -23,8 +23,12 @@
       ]
     }
   ],
+  "host_permissions": ["*://*/*"],
   "permissions": [
+    "tabs",
     "sidePanel",
-    "activeTab"
+    "activeTab",
+    "scripting",
+    "storage"
   ]
 }

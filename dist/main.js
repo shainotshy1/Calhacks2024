@@ -2273,13 +2273,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 //==== IMPORTS ====//
-// import OpenAI from "openai";
-// import Groq from "groq-sdk";
-// const Groq = require("groq-sdk");
-// import { Groq } from "../node_modules/groq-sdk/index.js";
-// import { Groq } from "../node_modules/groq-sdk/index.js";
-// const Groq = require("./node_modules/groq-sdk");
-
 
 
 //==== CHATLOG ====//
@@ -2316,7 +2309,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("input-field-form");
   const input = document.getElementById("input-field");
   const chatClear = document.getElementById("clear-chat");
-  // const output = document.getElementById('output');
 
   loadChatLog();
   console.log('test');
@@ -2344,12 +2336,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   chatClear.addEventListener("click", clearChatLog);
 });
-// const inputs = document.getElementById("input-field").elements;
-// const input = inputs[0];
-
-// addEventListener("submit", (event) => {});
-
-// onsubmit = (event) => {};
 
 //==== GROQ CALLS ====//
 // const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
@@ -2360,24 +2346,106 @@ const groq = new groq_sdk__WEBPACK_IMPORTED_MODULE_0__.Groq({
 
 // export
 async function messageGroq(content) {
-  const chatCompletion = await getGroqChatCompletion(content);
-  // Print the completion returned by the LLM.
-  //   console.log(chatCompletion.choices[0]?.message?.content || "");
+  // const chatCompletion = await getGroqChatCompletion(content);
+  // // Print the completion returned by the LLM.
+  // //   console.log(chatCompletion.choices[0]?.message?.content || "");
+  // const s = chatCompletion.choices[0]?.message?.content || "";
+  // addToChat(s);
+  const chatCompletion = await getGroqChatCompletion(content, JSON.parse(localStorage.getItem("currentHTMLElements")));
   const s = chatCompletion.choices[0]?.message?.content || "";
-  addToChat(s);
+  let parsedResponse;
+  try {
+    parsedResponse = JSON.parse(s);
+  } catch (error) {
+    console.error("Error parsing JSON response:", error);
+    throw new Error("Invalid JSON format from completion");
+  }
+  const explanation = parsedResponse.explanation;
+  const actions = parsedResponse.action;
+  console.log(actions)
+  addToChat(explanation);
 }
 
 // export
-async function getGroqChatCompletion(content) {
+async function getGroqChatCompletion(content, elements) {
+  //   input_entries = [
+  //     ChatEntry(role='system', content="
+  //               You are tasked with coming up with high level plan of how to solve the task specified by the user by performing a sequence on actions on a website given the elements available on the website.
+  //               Your response should be formatted as json following the structure {'actions':[Action], 'explanation': str}, where the explanation is a short explanation of the actions being and an action can look like any of the following,
+  //               - "Input(id="{id}").set_value("{input}")"
+  //               - "TextArea(id="{id}".set_value("{input}")"
+  //               - "Input(id="{id}").submit()"
+  //         """),
+  //     ChatEntry(role='system', content="The following elements are available in the website:\n" + '\n'.join([str(i) for i in elements])),
+  //     ChatEntry(role='user', content=f"I want to buy the latest iPhone."),
+  // ]
+  // output = json.loads(chat_api.chat(input_entries))
+  // explanation = output['explanation']
+  // actions = output['actions']
+
   return groq.chat.completions.create({
     messages: [
+      {
+        role: "system",
+        content: `You are tasked with coming up with a high level solution to perform the task specified by the user. Your response should beformatted as a json including {action:[Action], explanation: str} where the explanation is a concise explanation of the actions to take and the actions are any of the following
+          - {type: "input", id: "{id}", value: "{input}", action="set_value"}
+          - {type: "input", id: "{id}", action="submit"}
+
+        Try to keep your actions within the current webpage. The following elements are available on the website, and their HTML attributes:\n${elements}
+        `
+      },
       {
         role: "user",
         content: content,
       },
     ],
     model: "llama3-8b-8192",
+    response_format: { type: "json_object" },
   });
+}
+      
+//     },
+//       {
+//         role: "user",
+//         content: content,
+//       },
+//     ],
+//     model: "llama3-8b-8192",
+//   });
+// }
+
+//==== GET DOM ====//
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    console.log(sender.tab ?
+                "from a content script:" + sender.tab.url :
+                "from the extension");
+    if (request)
+      sendResponse({ farewell: "received" });
+    
+    // addToChat(JSON.stringify(request))
+    // let result = request.elements;
+    // addToChat(request)
+    // addToChat(JSON.stringify(request));
+    saveElements(request);
+    // addToChat(result[0].tagName);
+  }
+);
+
+async function saveElements(result) {
+  // let elems = [];
+  // for (let i = 0; i < result.length; i++) {
+  //   if (result[i].tagName === 'input' || result[i].tagName === 'textarea' || result[i].tagName === 'button' || result[i].tagName === 'a' || result[i].tagName === 'div') {
+  //     elems.push("Tag: " + result[i].tagName + ", Attributes: " + result[i].attributes + ", innerText: " + result[i].innerText);
+  //   }
+  // }
+  // addToChat(request.greeting);
+  // let chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
+  // chatLog.push(message);
+  // console.log(chatLog)
+  localStorage.setItem("currentHTMLElements", JSON.stringify(result));
+  // addToChat(localStorage.getItem("currentHTMLElements"));
+  // addToChat(JSON.stringify(result));
 }
 
 //==== MAIN ====//
