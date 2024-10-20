@@ -5,8 +5,10 @@ export async function perform_action(action) {
 
     if (action.action === "redirect") {
         // Redirect to the specified URL
-        console.log('trying to redirect to website', action.link)
-        window.location.href = action.link;
+        // console.log('trying to redirect to website', action.link)
+        // window.location.href = action.link;
+        console.log(action.link);
+        window.open(action.link);
         return;  // Exit after redirection
     }
     
@@ -35,6 +37,10 @@ export async function perform_action(action) {
 
 export async function script_action(action) {
 
+    if (action.action === "redirect") {
+        perform_action(action);
+        return;
+    }
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         var activeTab = tabs[0];
         var activeTabId = activeTab.id;

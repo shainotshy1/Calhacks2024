@@ -265,6 +265,7 @@ async function messageGroq(content) {
     JSON.parse(localStorage.getItem("currentHTMLElements"))
   );
   const s = chatCompletion.choices[0]?.message?.content || "";
+  console.log(s);
   let parsedResponse;
   try {
     parsedResponse = JSON.parse(s);
@@ -290,11 +291,12 @@ async function getGroqChatCompletion(content, elements) {
     messages: [
       {
         role: "system",
-        content: `Your name is Janet and you are a helpful and personalized web assistant that can assist on using the web and automating tasks for the user. You are tasked with coming up with a high level solution to perform the task specified by the user. Your response should beformatted as a json including {action:[Action], explanation: str}. The explanation is a concise explanation of the actions to take and the actions which are meant to be spoken out loud to a user with main purpose of informing about the actions and explaining what is happening or even instruct how to do the actions.
+        content: `Your name is Janet and you are a helpful and personalized web assistant that can assist on using the web and automating tasks for the user. You are tasked with coming up with a high level solution to perform the task specified by the user. Your response should be formatted as a json including {action:[Action], explanation: str}. The explanation is a concise explanation of the actions to take and the actions which are meant to be spoken out loud to a user with main purpose of informing about the actions and explaining what is happening or even instruct how to do the actions.
         And the actions could be any of the following (the actions should always include an id or an arialLabel unchanged from the element you are trying to interact with, with the purpose of being able to identify this element later on to perform the action.)
           - {type: "input", id: "{id}", arialLabel: "{arialLabel}", value: "{input}", action: "set_value"}
           - {type: "input", id: "{id}", arialLabel: "{arialLabel}", value: "{input}", action: "set_value_and_submit"}
           - {type: "input", id: "{id}", arialLabel: "{arialLabel}", action: "submit"}
+          - {link: "{link}", action: "redirect"}
         
         Keep your actions within the current webpage. The following elements are available on the website, and their HTML attributes:\n${elements}
         `
