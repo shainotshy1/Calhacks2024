@@ -72,14 +72,14 @@ function triggerDebugActions() {
     executeActions(actions);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const debugBtn = document.getElementById('debug-button');
+// document.addEventListener('DOMContentLoaded', function() {
+//     const debugBtn = document.getElementById('debug-button');
 
-    console.log('doin stuff')
+//     console.log('doin stuff')
 
-    debugBtn.addEventListener("click", () => {
-        console.log('debug was clicked')
-        // Call the function defined in content.js to execute actions
-        triggerDebugActions();
-    });
-});
+//     debugBtn.addEventListener("click", () => {
+//         console.log('debug was clicked')
+//         // Call the function defined in content.js to execute actions
+//         triggerDebugActions();
+//     });
+// });

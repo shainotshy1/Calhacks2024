@@ -11,10 +11,13 @@
 import { Groq } from "groq-sdk";
 
 //==== CHATLOG ====//
-function addToChat(s, do_save = true) {
+function addToChat(s, is_human, do_save = true) {
   const newDiv = document.createElement("div");
+  const newSubDiv = document.createElement("div");
   const newContent = document.createTextNode(s);
-  newDiv.appendChild(newContent);
+  newDiv.id = (is_human == true) ? "human-message" : "ai-message";
+  newSubDiv.appendChild(newContent);
+  newDiv.append(newSubDiv)
   const currentDiv = document.getElementById("chatlog");
   currentDiv.appendChild(newDiv);
   console.log(s);
@@ -24,13 +27,13 @@ function addToChat(s, do_save = true) {
 function saveToLocalStorage(message) {
   let chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
   chatLog.push(message);
-  console.log(chatLog)
+  console.log(chatLog);
   localStorage.setItem("chatLog", JSON.stringify(chatLog));
 }
 
 function loadChatLog() {
   const chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
-  chatLog.forEach((message) => addToChat(message, false));
+  chatLog.forEach((message, i) => addToChat(message, (i % 2 == 0), false));
 }
 
 function clearChatLog() {
@@ -54,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
     const userInput = input.value.trim();
     console.log(userInput);
-    addToChat(userInput);
+    addToChat(userInput, true);
     messageGroq(userInput);
     // output.textContent = `You entered: ${userInput}`;
     input.value = ""; // Clear the input field
@@ -92,7 +95,7 @@ async function messageGroq(content) {
   // Print the completion returned by the LLM.
   //   console.log(chatCompletion.choices[0]?.message?.content || "");
   const s = chatCompletion.choices[0]?.message?.content || "";
-  addToChat(s);
+  addToChat(s, false);
 }
 
 // export

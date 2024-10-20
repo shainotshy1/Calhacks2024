@@ -16,6 +16,8 @@
   "web_accessible_resources": [
     {
       "resources": [
+        "sidebar.html",
+        "js/request-perm.ts",
         "index.html"
       ],
       "matches": [
@@ -25,6 +27,11 @@
   ],
   "permissions": [
     "sidePanel",
-    "activeTab"
+    "activeTab",
+    "offscreen",
+    "storage",
+    "system.display",
+    "tabCapture",
+    "unlimitedStorage"
   ]
 }

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>test</title>
+    <script type="module" src="js/sidebar.js"></script>
+    <script type="module" src="js/request-perm.ts"></script>
+    <link rel="stylesheet" href="default.css">
+  </head>
+  <body>
+    <h1 class="sidebar-h1">Hi, I'm Janet. How can I help?</h1>
+    <p>I'm listening...</p>
+    <button id="startRecordingButton">🎙️ Start Recording</button>
+    <div id="recordingInterface" style="display: none">
+      <button id="stopRecordingButton">⏹️ Stop</button>
+      <button id="pauseRecordingButton">⏸️ Pause</button>
+      <button id="resumeRecordingButton">▶️ Resume</button>
+      <p id="recordingStatus">Recording...</p>
+    </div>
+    <div id="stoppedInterface" style="display: none">
+      <p>Recording has been stopped. Your file is saved locally.</p>
+    </div>
+
+    <script src="recording.js"></script>
+  </body>
+</html>
