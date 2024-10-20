@@ -20,20 +20,18 @@ function addToChat(s, is_human, do_save = true) {
   newDiv.append(newSubDiv)
   const currentDiv = document.getElementById("chatlog");
   currentDiv.appendChild(newDiv);
-  console.log(s);
-  if (do_save) saveToLocalStorage(s);
+  if (do_save) saveToLocalStorage([s, is_human]);
 }
 
 function saveToLocalStorage(message) {
   let chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
   chatLog.push(message);
-  console.log(chatLog);
   localStorage.setItem("chatLog", JSON.stringify(chatLog));
 }
 
 function loadChatLog() {
   const chatLog = JSON.parse(localStorage.getItem("chatLog")) || [];
-  chatLog.forEach((message, i) => addToChat(message, (i % 2 == 0), false));
+  chatLog.forEach((x) => addToChat(x[0], x[1], false));
 }
 
 function clearChatLog() {
@@ -50,13 +48,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // const output = document.getElementById('output');
 
   loadChatLog();
-  console.log('test');
 
   function handleSubmit(event) {
-    console.log(event);
     event.preventDefault();
     const userInput = input.value.trim();
-    console.log(userInput);
     addToChat(userInput, true);
     messageGroq(userInput);
     // output.textContent = `You entered: ${userInput}`;
