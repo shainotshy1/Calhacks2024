@@ -25,11 +25,14 @@
       ]
     }
   ],
+  "host_permissions": ["*://*/*"],
   "permissions": [
+    "tabs",
     "sidePanel",
     "activeTab",
     "offscreen",
     "storage",
+    "scripting",
     "system.display",
     "tabCapture",
     "unlimitedStorage"
